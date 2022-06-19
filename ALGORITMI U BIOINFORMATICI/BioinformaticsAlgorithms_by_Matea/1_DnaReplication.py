@@ -347,21 +347,52 @@ frekventni_patterni=FindingFrequentWordsBySorting(text,k)
 print(frekventni_patterni)  # ['AA', 'GG']
 
 ###############################
-# CLUMP FINDING
+# CLUMP FINDING  poboljsani -  to ima u knjizi
 
-def ComputingFrequencies(text,k):
-    return 0
+################################
+# NEIGHBOURS
+
+def ImmediateNeighbours(Pattern):
+    Pattern=Pattern.upper()
+    nukleotids=["A","B","C","D"]
+    Neighbourhood= [Pattern]
+    for i in range(1,len(Pattern)):
+        symbol=Pattern[i]
+        for nukleotid in nukleotids:
+            if(nukleotid!=symbol):
+                Neighbour= Pattern[0:i] + nukleotid.lower() + Pattern[i+1: len(Pattern)]
+                # mijenjamo simbol za nukleotid da bismo generirali susjedstvo
+                Neighbourhood.append(Neighbour)
+    return Neighbourhood
+
+print("*********** Neposredno Susjedstvo :  ****************")
+print(ImmediateNeighbours(text)) # ['AAGCAAAGGTGGG', 'AbGCAAAGGTGGG', 'AcGCAAAGGTGGG', 'AdGCAAAGGTGGG', 'AAaCAAAGGTGGG', 'AAbCAAAGGTGGG', 'AAcCAAAGGTGGG', 'AAdCAAAGGTGGG', 'AAGaAAAGGTGGG', 'AAGbAAAGGTGGG', 'AAGdAAAGGTGGG', 'AAGCbAAGGTGGG', 'AAGCcAAGGTGGG', 'AAGCdAAGGTGGG', 'AAGCAbAGGTGGG', 'AAGCAcAGGTGGG', 'AAGCAdAGGTGGG', 'AAGCAAbGGTGGG', 'AAGCAAcGGTGGG', 'AAGCAAdGGTGGG', 'AAGCAAAaGTGGG', 'AAGCAAAbGTGGG', 'AAGCAAAcGTGGG', 'AAGCAAAdGTGGG', 'AAGCAAAGaTGGG', 'AAGCAAAGbTGGG', 'AAGCAAAGcTGGG', 'AAGCAAAGdTGGG', 'AAGCAAAGGaGGG', 'AAGCAAAGGbGGG', 'AAGCAAAGGcGGG', 'AAGCAAAGGdGGG', 'AAGCAAAGGTaGG', 'AAGCAAAGGTbGG', 'AAGCAAAGGTcGG', 'AAGCAAAGGTdGG', 'AAGCAAAGGTGaG', 'AAGCAAAGGTGbG', 'AAGCAAAGGTGcG', 'AAGCAAAGGTGdG', 'AAGCAAAGGTGGa', 'AAGCAAAGGTGGb', 'AAGCAAAGGTGGc', 'AAGCAAAGGTGGd']
+
+print("*********** Susjedstvo :  ****************")
+def Suffix(Pattern):
+    patt=Pattern[1:]
+    return  patt
+
+def FirstSymbol(Pattern):
+    patt= Pattern[0]
+    return patt
+
+def Neighbors(Pattern,d):
+    if(d==0): return [Pattern]
+    if(len(Pattern)==1): return["A","C","G","T"]
+    nukleotids=["A","C","G","T"]
+    Pattern=Pattern.upper()
+    Neighborhood=[]
+    SuffixNeighbors= Neighbors(Suffix(Pattern),d)
+    for Text in SuffixNeighbors:
+        if(HammingDistance(Suffix(Pattern),Text)<d):
+            for nukleotid in nukleotids:
+                Neighborhood.append( nukleotid+Text  )
+        else:
+            Neighborhood.append(FirstSymbol(Pattern)+ Text)
+    return Neighborhood
 
 
-def ClumpFinding(Genome,k, t ,L):
-    FrequentPatterns=[]
-    CLUMP=[]
-    for i in range(int(math.pow(4,k))  -1 ):
-        CLUMP.append(0)
-    for i in range(0, len(Genome) -L):
-        Text= Genome[i : (i+L)]
-        FREQUENCY_ARRAY= ComputingFrequencies(Text,k)
-
-frekventni_patterni1=ClumpFinding(text,k,1,5)
-
-
+Susjedstvo=Neighbors(text,2)
+for susjed in Susjedstvo:
+    print(susjed)
