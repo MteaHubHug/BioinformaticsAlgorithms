@@ -346,4 +346,22 @@ def FindingFrequentWordsBySorting(Text,k):
 frekventni_patterni=FindingFrequentWordsBySorting(text,k)
 print(frekventni_patterni)  # ['AA', 'GG']
 
+###############################
+# CLUMP FINDING
+
+def ComputingFrequencies(text,k):
+    return 0
+
+
+def ClumpFinding(Genome,k, t ,L):
+    FrequentPatterns=[]
+    CLUMP=[]
+    for i in range(int(math.pow(4,k))  -1 ):
+        CLUMP.append(0)
+    for i in range(0, len(Genome) -L):
+        Text= Genome[i : (i+L)]
+        FREQUENCY_ARRAY= ComputingFrequencies(Text,k)
+
+frekventni_patterni1=ClumpFinding(text,k,1,5)
+
 
