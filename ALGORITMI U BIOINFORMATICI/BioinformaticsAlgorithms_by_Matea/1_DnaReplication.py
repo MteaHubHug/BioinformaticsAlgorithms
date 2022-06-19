@@ -4,6 +4,8 @@
 # 1A
 # Input : A DNA string Genome
 # Output : The location of oriC in Genome
+import math
+
 
 def PatternCount(Text, Pattern):
     count = 0
@@ -250,9 +252,98 @@ HammingDist=HammingDistance(p,q)
 
 
 # 1 H Approximate Pattern Matching Problem
+# Find all approximate occurrences of a pattern in a string
 #### u C#-u ...
 
+####################################################
+# 1K - Frequency Array
+# funkcije koje su potrebne u algoritmu:
 
+def SymbolToNumber(symbol):
+    num=-1
+    symbol=symbol.upper()
+    if(symbol=="A"): num=0
+    elif(symbol=="C"): num=1
+    elif(symbol=="G"): num=2
+    elif(symbol=="T"): num=3
+    return num
 
+def LastSymbol(Pattern):
+    patt= Pattern[-1:]
+    return patt
+
+def Prefix(Pattern):
+    patt=Pattern[:-1]
+    return  patt
+
+def PatternToNumber(Pattern):
+    if(len(Pattern)==0) : return 0
+    symb=LastSymbol(Pattern)
+    prefix= Prefix(Pattern)
+    return 4 * PatternToNumber(prefix) + SymbolToNumber(symb)
+
+### print(PatternToNumber("GT")) # =11
+
+def NumberToSymbol(number):
+    symb="X"
+    if(number==0): symb="A"
+    elif(number==1): symb="C"
+    elif(number==2): symb="G"
+    elif(number==3): symb="T"
+    return symb
+
+def NumberToPattern(index,k):
+    if k==1 : return NumberToSymbol(index)
+
+    prefixIndex= int(index//4) #kvocijent
+    r = int(index%4)
+    symbol = NumberToSymbol(r)
+    PrefixPattern = NumberToPattern(prefixIndex, k-1)
+    return PrefixPattern + symbol
+
+###print(NumberToPattern(11,2)) # = GT
+
+###### PRIMJER :
+text= "AAGCAAAGGTGGG"
+k=2
+k_mers=find_k_mers(text,k)
+print(k_mers)  # 2-meri : ['AA', 'AG', 'GC', 'CA', 'AA', 'AA', 'AG', 'GG', 'GT', 'TG', 'GG', 'GG']
+indexi=[]
+for kmer in k_mers:
+    idx=PatternToNumber(kmer)
+    kmer_idx_tuple= (kmer,idx)
+    indexi.append(kmer_idx_tuple)
+
+print(indexi)
+
+def SortTuples(indexi):
+    sorted_indices=sorted(indexi, key=lambda x: x[1])
+    return sorted_indices
+
+sorted_indices=SortTuples(indexi)
+print(sorted_indices)
+
+def FindingFrequentWordsBySorting(Text,k):
+    FrequentPatterns=[]
+    INDEX=[]
+    COUNT=[]
+    for i in range(len(Text)-k+1):
+        Pattern=Text[i: (i+k)]
+        INDEX.append(PatternToNumber(Pattern) )
+        COUNT.append(1)
+    SORTED_INDEX=INDEX
+    SORTED_INDEX.sort()
+    for i in range(1,len(Text)-k+1):
+        if(SORTED_INDEX[i]==SORTED_INDEX[i-1]): # ovo je glavna fora di se iskoristava sortiranost
+            COUNT[i]=COUNT[i-1] +1
+    maxCount=max(COUNT)
+    for i in range(0,len(Text)-k+1):
+        if(COUNT[i]==maxCount):
+            Pattern=NumberToPattern(SORTED_INDEX[i],k)
+            FrequentPatterns.append(Pattern)
+    return FrequentPatterns
+
+frekventni_patterni=FindingFrequentWordsBySorting(text,k)
+print(frekventni_patterni)  # ['AA', 'GG']
 
 
