@@ -376,7 +376,7 @@ def Suffix(Pattern):
 def FirstSymbol(Pattern):
     patt= Pattern[0]
     return patt
-
+#### 1 N
 def Neighbors(Pattern,d):
     if(d==0): return [Pattern]
     if(len(Pattern)==1): return["A","C","G","T"]
@@ -393,6 +393,51 @@ def Neighbors(Pattern,d):
     return Neighborhood
 
 
-Susjedstvo=Neighbors(text,2)
+#Susjedstvo=Neighbors(text,2)
+#for susjed in Susjedstvo:
+#    print(susjed)
+
+# Na ovaj način možemo generirati Susjedstvo svih k-mera Hammingove distance najviše d od Patterna.
+# Modificirajmo Funkciju Neighbours tako da generira Susjedstvo svih k-mera koji su udaljeni od Patterna točno za d ::
+
+'''def IterativeNeighbors(Pattern,d):
+    Neighbourhood=set()
+    Neighbourhood.add(Pattern)
+    for j in range(d):
+        for Pattern_ in Neighbourhood:
+            Neighbourhood.add(IterativeNeighbors(Pattern_,j))
+    return Neighbourhood'''
+
+
+# Pomocu ovog algoritma mozemo naci Frekventne rijeci u stringu s mismatchovima pomocu sortiranja ==> poboljsani i brzi algoritam
+def FindingFrequentWordsWithMismatchesBySorting(Text,k,d):
+    FrequentPatterns=set()
+    Neighborhoods=[]
+    Index=[]
+    Count=[]
+    for i in range(len(Text)-k):  # ovdje mozda treba dodati -1 ==> len(Text)-k-1
+        Neighborhoods.append(Neighbors(Text[i : (i+k)],d))
+    NeighborhoodArray=[]
+    for l in Neighborhoods:
+        for string in l:
+            NeighborhoodArray.append(string)
+
+    for i in range(len(Neighborhoods)-1): # Ovdje mozda treba dodati -1
+        Pattern= NeighborhoodArray[i]
+        Index.append(  PatternToNumber(Pattern) )
+        Count.append(1)
+    SortedIndex=Index
+    SortedIndex.sort()
+    for i in range(len(Neighborhoods)-1-1):
+        if(SortedIndex[i]==SortedIndex[i+1]):
+            Count[i+1]=Count[i]+1
+    maxCount=max(Count)
+    for i in range(len(Neighborhoods)-1): # Ovdje mozda treba dodati -1
+        if(Count[i]==maxCount):
+            Pattern=NumberToPattern(SortedIndex[i],k)
+            FrequentPatterns.add(Pattern)
+    return FrequentPatterns
+
+Susjedstvo=FindingFrequentWordsWithMismatchesBySorting(text,k,2)
 for susjed in Susjedstvo:
     print(susjed)
