@@ -403,9 +403,9 @@ def Neighbors(Pattern,d):
 '''def IterativeNeighbors(Pattern,d):
     Neighbourhood=set()
     Neighbourhood.add(Pattern)
-    for j in range(d):
+    for j in range(1,d):
         for Pattern_ in Neighbourhood:
-            Neighbourhood.add(IterativeNeighbors(Pattern_,j))
+            Neighbourhood.add(ImmediateNeighbours(Pattern_))
     return Neighbourhood'''
 
 
@@ -438,6 +438,3 @@ def FindingFrequentWordsWithMismatchesBySorting(Text,k,d):
             FrequentPatterns.add(Pattern)
     return FrequentPatterns
 
-Susjedstvo=FindingFrequentWordsWithMismatchesBySorting(text,k,2)
-for susjed in Susjedstvo:
-    print(susjed)
