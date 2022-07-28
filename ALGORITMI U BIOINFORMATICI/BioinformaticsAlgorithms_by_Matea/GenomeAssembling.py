@@ -164,11 +164,49 @@ def Overleap(kolekcija):
 {'ACCGA': ['CCGAA'], 'CCGAA': ['CGAAG'], 'CGAAG': ['GAAGC'], 'GAAGC': ['AAGCT'], 'AAGCT': []}''' # ==> OK
 
 ########################################################################################################################################
-########################################################################################################################################
+####################################################### 3 D ############################################################################
 ########################################################################################################################################
 
 # Pokusajmo sloziti usmjerene grafove ==> trazi se najduzi graf, ali se kroz svaki svor smije proci samo jedanput
 ## odnosno, svaki kmer mogu iskoristiti samo jedan put
+
+
+# Hammiltonov put - Hamiltonian path Problem :
+# input : usmjereni graf
+# output : put koji posjecuje svaki cvor u grafu i to samo jednom ( ako takav put postoji )
+
+# Ideja ==> De Brujin
+k=4
+text="AAGATTCTCTAC"
+
+def DeBrujinGraph(text,k):
+    #print(text)
+    edges=findKmers(text,k)
+    #print(edges)
+    nodes=[]
+    for edge in edges:
+        node=edge[:-1]
+        nodes.append(node)
+    nodes.append( edges[len(edges)-1][1:]  )
+    #print(nodes)
+    nodes_dict={}
+    unique_nodes = list(set(nodes))
+    for unique_node in unique_nodes:
+        nodes_dict[unique_node]=[]
+    for i in range(len(nodes)-1):
+        nodes_dict[nodes[i]].append(  nodes[i+1] )
+    #print("*******************")
+    #print(nodes_dict)
+    return nodes_dict
+
+#deBrujin=DeBrujinGraph(text,k)
+#print(deBrujin)
+# OUTPUT : {'CTC': ['TCT'], 'CTA': ['TAC'], 'TAC': [], 'AGA': ['GAT'], 'TTC': ['TCT'], 'GAT': ['ATT'], 'ATT': ['TTC'], 'TCT': ['CTC', 'CTA'], 'AAG': ['AGA']} => OK
+
+########################################################################################################################################
+########################################################################################################################################
+########################################################################################################################################
+
 
 
 kolekcija_dijelica=["AAT", "ATG", "ATG", "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC", "TGG", "TGT"]
@@ -178,6 +216,8 @@ def get_sufixes(kmer):
     for i in range(1,len(kmer)):
         prefix=kmer[i:]
         prefixi.append(prefix)
+
+
     #print(prefixi)
     return prefixi
 
