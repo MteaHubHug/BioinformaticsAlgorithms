@@ -1,3 +1,5 @@
+import collections
+from collections import OrderedDict
 # Newspaper problem - mozemo li od puno fragmenata novina sastaviti novine ?
 # Teze nego sto se cini - imamo dijelice puno kopija istog izdanja jednog primjerka
 # Neke informacije su izgubljene, nemamo kompletne novine, samo dijelove
@@ -197,12 +199,95 @@ def DeBrujinGraph(text,k):
         nodes_dict[nodes[i]].append(  nodes[i+1] )
     #print("*******************")
     #print(nodes_dict)
+    nodes_dict=OrderedDict(sorted(nodes_dict.items()))
     return nodes_dict
 
-deBrujin=DeBrujinGraph(text,k)
-print(deBrujin)
+#deBrujin=DeBrujinGraph(text,k)
+#print(deBrujin)
 # OUTPUT : {'CTC': ['TCT'], 'CTA': ['TAC'], 'TAC': [], 'AGA': ['GAT'], 'TTC': ['TCT'], 'GAT': ['ATT'], 'ATT': ['TTC'], 'TCT': ['CTC', 'CTA'], 'AAG': ['AGA']} => OK
 
+########################################################################################################################################
+################################################ 3 E #################################################################################
+########################################################################################################################################
+# Eulerovi putevi
+# Iako smo povezali cvorove u deBrujin grafu, nismo promijenili bridove
+# Ako zelimo rijesiti nas problem, trebamo prakticki proci kroz svaki *brid* jedan put ==> Eulerov put
+# EULER PATH PROBLEM
+# input : usmjereni graf
+# output : put koji posjecuje svaki brid tocno jedan put ( ako takav put postoji)
+
+# Pronadjimo Eulerov put u DeBrujin Grafu
+# Dakle, ne smijemo imati dva edgea koji shareaju isti node
+
+# Dobijemo razbacane k-mere, ne znamo njihov poredak
+# Nadjemo njihoe prefixe i sufixe
+# Za svaki sufix nekog k-mera (cvora) trazimo prefix nekog drugog kmera (cvora)
+# kako bismo ih mogli "zalijepiti" zajedno i tako dobijemo trazeni tekst
+# Tako dobijemo Composition Graph i kada uzmemo da su dva jednaka cvora
+#  koji su zalijeljeni zapravo jedan, dobijemo DeBrujin graf
+# CompositionGraph(Patterns) je graf sa duplim cvorovima,
+# a DeBrujin(Patterns) je isti taj graf, ali su dupli cvorovi samo jedan cvor
+######## 3E :
+# Napravi DeBrujin Graf, ali bez ljepljenja cvorova
+# cvorovi su *jedinstveni* (k-1)-meri koji su prefixi/sufixi kmera
+# Prvo, ako imamo kolekciju kmera (nazivamo ju Patterns),
+# - nadjemo sve *jedinstvene* (k-1)-mere
+# AAT , ATG, ATG , ATG, CAT, CCA, GAT, GCC, GGA, GGG, GTT, TAA, TGC , TGG, TGT
+# ==> AA , AT, CA, CC, GA, GC, GG, GT, TA, TG, TT
+
+# Za svaki kmer u Patterns, povezemo prefix i sufix cvora
+
+patterns=["AAT" , "ATG", "ATG" , "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC" , "TGG", "TGT"]
+
+def get_unique_k_minus_mers(Patterns):
+    nodes=[]
+    for kmer in Patterns:
+        prefix=get_prefix(kmer)
+        sufix=get_sufix(kmer)
+        nodes.append(prefix)
+        nodes.append(sufix)
+    nodes=list(set(nodes))
+    nodes.sort()
+    return nodes
+
+patterns_rosalind= ["GAGG","CAGG","GGGG","GGGA","CAGG","AGGG","GGAG"]
+
+def DeBrujinGraph2(Patterns):
+    nodes=get_unique_k_minus_mers(Patterns)
+    deBrujin={}
+    for node in nodes:
+        deBrujin[node]=[]
+
+    for kmer in Patterns:
+        prefix=get_prefix(kmer)
+        sufix=get_sufix(kmer)
+        deBrujin[prefix].append(sufix)
+    deBrujin = OrderedDict(sorted(deBrujin.items()))
+    for key in deBrujin:
+        s=sorted(deBrujin[key])
+        deBrujin[key]=s
+    #print(deBrujin)
+    return deBrujin
+
+#deBrujin2=DeBrujinGraph2(patterns_rosalind)
+ # moj oputput : OrderedDict([('AGG', ['GGG']), ('CAG', ['AGG', 'AGG']), ('GAG', ['AGG']), ('GGA', ['GAG']), ('GGG', ['GGA', 'GGG'])]) ==> OK :)
+
+'''input : 
+GAGG
+CAGG
+GGGG
+GGGA
+CAGG
+AGGG
+GGAG
+
+ocekivani output : 
+AGG -> GGG
+CAG -> AGG,AGG
+GAG -> AGG
+GGA -> GAG
+GGG -> GGA,GGG
+'''
 ########################################################################################################################################
 ########################################################################################################################################
 ########################################################################################################################################
