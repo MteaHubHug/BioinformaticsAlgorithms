@@ -190,7 +190,7 @@ def DeBrujinGraph(text,k):
     nodes.append( edges[len(edges)-1][1:]  )
     #print(nodes)
     nodes_dict={}
-    unique_nodes = list(set(nodes))
+    unique_nodes = list(set(nodes[:-1]))
     for unique_node in unique_nodes:
         nodes_dict[unique_node]=[]
     for i in range(len(nodes)-1):
@@ -199,8 +199,8 @@ def DeBrujinGraph(text,k):
     #print(nodes_dict)
     return nodes_dict
 
-#deBrujin=DeBrujinGraph(text,k)
-#print(deBrujin)
+deBrujin=DeBrujinGraph(text,k)
+print(deBrujin)
 # OUTPUT : {'CTC': ['TCT'], 'CTA': ['TAC'], 'TAC': [], 'AGA': ['GAT'], 'TTC': ['TCT'], 'GAT': ['ATT'], 'ATT': ['TTC'], 'TCT': ['CTC', 'CTA'], 'AAG': ['AGA']} => OK
 
 ########################################################################################################################################
