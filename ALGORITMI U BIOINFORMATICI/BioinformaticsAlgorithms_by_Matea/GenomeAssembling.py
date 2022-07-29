@@ -289,6 +289,121 @@ GGA -> GAG
 GGG -> GGA,GGG
 '''
 ########################################################################################################################################
+#####################################   3 F ############################################################################################
+########################################################################################################################################
+
+# Problem 7 mostova - Euler
+# Mozemo li krenuti iz jednog grada i vratiti se u njega tako da prodjemo svaki *brid* tocno jednom
+# odnosno : Postoji li Eulerov ciklus? ... Graf koji sadrzi Eulerov ciklus se naziva *Eulerov graf*
+# Euler cycle Problem :
+# input : graf
+# output : Eulerov ciklus (ukoliko postoji)
+# stupanj ulaza : broj bridova koji ulaze u cvor
+# stupanj izlaza : broj bridova koji izlaze iz cvora
+# ako su stupanj ulaza i stupan izlaza jednaki, cvor je *balansiran*
+# ako su svi cvorovi u grafu balansirani, taj graf je balansiran
+# Eulerovi grafovi trebaju biti balansirani
+# Nepovezani graf - ako se iz jednog cvora nikako ne moze doseci neki drugi cvor
+# U nepovezanom grafu se ne naci Eulerov ciklus
+# Strogo povezan graf - ako se iz svakog svora moze doci u svaki cvor
+# Eulerov graf je snazno povezan
+# EULEROV TEOREM - svaki balansirani strogo povezani usmjereni graf je Eulerov
+# dokaz :
+# Neka je graf balansiran i strogo povezan i usmjeren
+#
+
+def printCircuit(adj):
+    # adj represents the adjacency list of
+    # the directed graph
+    # edge_count represents the number of edges
+    # emerging from a vertex
+    edge_count = dict()
+
+    for i in range(len(adj)):
+        # find the count of edges to keep track
+        # of unused edges
+        edge_count[i] = len(adj[i])
+
+    if len(adj) == 0:
+        return  # empty graph
+
+    # Maintain a stack to keep vertices
+    curr_path = []
+
+    # vector to store final circuit
+    circuit = []
+
+    # start from any vertex
+    curr_path.append(0)
+    curr_v = 0  # Current vertex
+
+    while len(curr_path):
+
+        # If there's remaining edge
+        if edge_count[curr_v]:
+
+            # Push the vertex
+            curr_path.append(curr_v)
+
+            # Find the next vertex using an edge
+            next_v = adj[curr_v][-1]
+
+            # and remove that edge
+            edge_count[curr_v] -= 1
+            adj[curr_v].pop()
+
+            # Move to next vertex
+            curr_v = next_v
+
+        # back-track to find remaining circuit
+        else:
+            circuit.append(curr_v)
+
+            # Back-tracking
+            curr_v = curr_path[-1]
+            curr_path.pop()
+
+    # we've got the circuit, now print it in reverse
+    for i in range(len(circuit) - 1, -1, -1):
+        print(circuit[i], end="")
+        if i:
+            print(" -> ", end="")
+
+'''ROSALIND primjer :
+0 -> 3
+1 -> 0
+2 -> 1,6
+3 -> 2
+4 -> 2
+5 -> 4
+6 -> 5,8
+7 -> 9
+8 -> 7
+9 -> 6'''
+
+# Let us create and test graphs shown in above figures
+# Input Graph 2
+adj2 = [0] * 10
+for i in range(10):
+    adj2[i] = []
+
+adj2[0].append(3) #
+adj2[1].append(0)#
+adj2[2].append(1) #
+adj2[2].append(6) #
+adj2[3].append(2) #
+adj2[4].append(2) #
+adj2[5].append(4) #
+adj2[6].append(5) #
+adj2[6].append(8) #
+adj2[7].append(9) #
+adj2[8].append(7) #
+adj2[9].append(6) #
+#printCircuit(adj2)
+print()
+#6->8->7->9->6->5->4->2->1->0->3->2->6 # rosalind rjesenje
+ # moje rjesenje : 0 -> 3 -> 2 -> 6 -> 8 -> 7 -> 9 -> 6 -> 5 -> 4 -> 2 -> 1 -> 0  ... OK
+########################################################################################################################################
 ########################################################################################################################################
 ########################################################################################################################################
 
