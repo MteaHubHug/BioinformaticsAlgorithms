@@ -308,66 +308,49 @@ GGG -> GGA,GGG
 # Strogo povezan graf - ako se iz svakog svora moze doci u svaki cvor
 # Eulerov graf je snazno povezan
 # EULEROV TEOREM - svaki balansirani strogo povezani usmjereni graf je Eulerov
-# dokaz :
-# Neka je graf balansiran i strogo povezan i usmjeren
-#
+# algoritam :::
 
-def printCircuit(adj):
-    # adj represents the adjacency list of
-    # the directed graph
-    # edge_count represents the number of edges
-    # emerging from a vertex
+def EulerianCircuit(adj):
+    # adj - adjacency lista usmjerenog grafa
+    # edge_count - broj izlaznih bridova cvora
     edge_count = dict()
-
     for i in range(len(adj)):
-        # find the count of edges to keep track
-        # of unused edges
+        # nadjimo broj bridova da bismo pratili trag neiskoristenih bridova
         edge_count[i] = len(adj[i])
-
     if len(adj) == 0:
-        return  # empty graph
+        return  # prazan graf
 
-    # Maintain a stack to keep vertices
-    curr_path = []
-
-    # vector to store final circuit
-    circuit = []
-
-    # start from any vertex
-    curr_path.append(0)
-    curr_v = 0  # Current vertex
-
+    curr_path = [] # Spremamo vrhove u stog (stack)
+    circuit = [] # vektor u kojeg spremam konacni ciklus
+    curr_path.append(0) # mozemo poceti od bilo kojeg cvora, nije bitno
+    curr_v = 0  # trenutni cvor
     while len(curr_path):
+        if edge_count[curr_v]: # Ako je preostao brid
+            curr_path.append(curr_v) # dodajem cvor
+            next_v = adj[curr_v][-1] # Trazim iduci cvor koristeci brid
+            edge_count[curr_v] -= 1 # i onda oduzimam taj brid
+            adj[curr_v].pop() # i izbacujem taj brid
+            curr_v = next_v # micem se na iduci cvor
 
-        # If there's remaining edge
-        if edge_count[curr_v]:
-
-            # Push the vertex
-            curr_path.append(curr_v)
-
-            # Find the next vertex using an edge
-            next_v = adj[curr_v][-1]
-
-            # and remove that edge
-            edge_count[curr_v] -= 1
-            adj[curr_v].pop()
-
-            # Move to next vertex
-            curr_v = next_v
-
-        # back-track to find remaining circuit
-        else:
+        else: # back-track za trazenje ostatka ciklusa
             circuit.append(curr_v)
-
             # Back-tracking
             curr_v = curr_path[-1]
             curr_path.pop()
 
-    # we've got the circuit, now print it in reverse
     for i in range(len(circuit) - 1, -1, -1):
         print(circuit[i], end="")
         if i:
             print(" -> ", end="")
+    circuit.reverse() # treba samo obrnit redoslijed
+    return circuit
+
+def convert_graph_to_input(graph):
+    lista=[]
+    for key in graph:
+        lista.append(graph[key])
+    #print(lista)
+    return lista
 
 '''ROSALIND primjer :
 0 -> 3
@@ -380,27 +363,21 @@ def printCircuit(adj):
 7 -> 9
 8 -> 7
 9 -> 6'''
-
-# Let us create and test graphs shown in above figures
-# Input Graph 2
-adj2 = [0] * 10
-for i in range(10):
-    adj2[i] = []
-
-adj2[0].append(3) #
-adj2[1].append(0)#
-adj2[2].append(1) #
-adj2[2].append(6) #
-adj2[3].append(2) #
-adj2[4].append(2) #
-adj2[5].append(4) #
-adj2[6].append(5) #
-adj2[6].append(8) #
-adj2[7].append(9) #
-adj2[8].append(7) #
-adj2[9].append(6) #
-#printCircuit(adj2)
-print()
+G= {
+    0: [3],
+    1: [0],
+    2: [1,6],
+    3: [2],
+    4: [2],
+    5: [4],
+    6: [5,8],
+    7: [9],
+    8: [7],
+    9: [6]
+}
+#adj2=convert_graph_to_input(G)
+#eulerova_tura=EulerianCircuit(adj2)
+#print()
 #6->8->7->9->6->5->4->2->1->0->3->2->6 # rosalind rjesenje
  # moje rjesenje : 0 -> 3 -> 2 -> 6 -> 8 -> 7 -> 9 -> 6 -> 5 -> 4 -> 2 -> 1 -> 0  ... OK
 ########################################################################################################################################
