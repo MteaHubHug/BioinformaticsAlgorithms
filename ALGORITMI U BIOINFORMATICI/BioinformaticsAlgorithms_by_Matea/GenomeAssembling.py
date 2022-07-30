@@ -26,21 +26,23 @@ import numpy
 from DnaReplication import *
 from MolecularClocksMotifs import *
 
-
 ################################################################################################################################
 ######################################### 3 A ##################################################################################
 ################################################################################################################################
-dna_text="TATGGGGTGC"
-k=3
-rosalind_sample="CAATCCAAC"
-k=5
-def Composition(Text,k):
-    kmeri=findKmers(Text,k)
+dna_text = "TATGGGGTGC"
+k = 3
+rosalind_sample = "CAATCCAAC"
+k = 5
+
+
+def Composition(Text, k):
+    kmeri = findKmers(Text, k)
     kmeri.sort()
     print(kmeri)
     return kmeri
 
-#kmeri=Composition(rosalind_sample,k) # ['ATG', 'GGG', 'GGG', 'GGT', 'GTG', 'TAT', 'TGC', 'TGG'] ==> ok :)
+
+# kmeri=Composition(rosalind_sample,k) # ['ATG', 'GGG', 'GGG', 'GGT', 'GTG', 'TAT', 'TGC', 'TGG'] ==> ok :)
 # rosalind - output : ['AATCC', 'ATCCA', 'CAATC', 'CCAAC', 'TCCAA'] ==> ok :)
 
 # Ono sto nas zanima nije dobiti kmere iz stringa, vec iz kmera dobiti Dna string , zapravo...==> String Reconstruction Problem
@@ -51,20 +53,20 @@ def Composition(Text,k):
 # Dakle, ocekujemo da se AAT i ATG preklapaju u AT
 # Krenuli bismo od TAA, jer se TA ne moze preklapati ni sa cim od ponudjenih, a onda se AA iz TAA moze preklapati s AAT recimo...
 # PRIMJER :
-    # TAA
-    #  AAT
-    #   ATG
-    #    TGT
-    #     GTT
+# TAA
+#  AAT
+#   ATG
+#    TGT
+#     GTT
 # ==> TAATGTT
 
 # Malo komliciraniji PRIMJER kada se moze vise kmera pojaviti kao odgovarajuci sljedbenik promatranog kmera :
 # kmeri : "AAT", "ATG", "ATG", "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC", "TGG", "TGT"
 
-    # TAA
-    #  AAT
-    #   ATG
-#==>  TAATG
+# TAA
+#  AAT
+#   ATG
+# ==>  TAATG
 # sada imamo vise izbora koji pocinju s TG : to su : TGC, TGG, TGT
 # izabiremo onaj koji nas navodi na to da potrosimo sve elemente koje imamo u danoj kolekciji kmera
 # a)  TAA               TAA
@@ -99,71 +101,75 @@ def Composition(Text,k):
 # Ideja sufixa i prefixa
 
 
-kolekcija_dijelica=["ACCGA","CCGAA","CGAAG","GAAGC","AAGCT"]
+kolekcija_dijelica = ["ACCGA", "CCGAA", "CGAAG", "GAAGC", "AAGCT"]
 
 
 def StringSpelledByGenomePathProblem(kolekcija):
-    res=kolekcija[0]
-    for i in range(1,len(kolekcija)):
-        res+=kolekcija[i][-1:]
+    res = kolekcija[0]
+    for i in range(1, len(kolekcija)):
+        res += kolekcija[i][-1:]
     return res
 
-#res=StringSpelledByGenomePathProblem(kolekcija_dijelica)
-#print(res) # # output : ACCGAAGCT ==> OK
+
+# res=StringSpelledByGenomePathProblem(kolekcija_dijelica)
+# print(res) # # output : ACCGAAGCT ==> OK
 # kad imam veliki dataset - puno charactera, mogu provjeriti rjesenje preko ascii tj. numericke reprezentacije charactera
 
 ########################################################################################################################################
 ################################################### 3 C ##################################################################################
 ########################################################################################################################################
 
-#kolekcija_dijelica=["AAT", "ATG", "ATG", "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC", "TGG", "TGT"]
+# kolekcija_dijelica=["AAT", "ATG", "ATG", "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC", "TGG", "TGT"]
 
 def get_prefix(kmer):
-    prefix=kmer[:-1]
+    prefix = kmer[:-1]
     return prefix
 
+
 def get_sufix(kmer):
-    sufix=kmer[1:]
+    sufix = kmer[1:]
     return sufix
 
-def AdjacencyList(Graph,kolekcija):
-    sljedbenici_dict={}
+
+def AdjacencyList(Graph, kolekcija):
+    sljedbenici_dict = {}
     for i in range(len(kolekcija)):
-        sljedbenici=[]
+        sljedbenici = []
         for j in range(len(kolekcija)):
-            if(i!=j):
-                if(Graph[i][j]==1):
+            if (i != j):
+                if (Graph[i][j] == 1):
                     sljedbenici.append(kolekcija[j])
-            sljedbenici_dict[kolekcija[i]]=sljedbenici
-    #print(sljedbenici_dict)
+            sljedbenici_dict[kolekcija[i]] = sljedbenici
+    # print(sljedbenici_dict)
     return sljedbenici_dict
 
 
 def Overleap(kolekcija):
-    shape=(len(kolekcija),len(kolekcija))
-    Graph= numpy.zeros(shape, dtype=int, order='C')
+    shape = (len(kolekcija), len(kolekcija))
+    Graph = numpy.zeros(shape, dtype=int, order='C')
     for i in range(len(kolekcija)):
         for j in range(len(kolekcija)):
-            if(i!=j):
-                kmer1=kolekcija[i]
-                kmer2=kolekcija[j]
-                sufix=get_sufix(kmer1)
+            if (i != j):
+                kmer1 = kolekcija[i]
+                kmer2 = kolekcija[j]
+                sufix = get_sufix(kmer1)
                 prefix = get_prefix(kmer2)
-                if(prefix==sufix):
-                    Graph[i][j]=1
+                if (prefix == sufix):
+                    Graph[i][j] = 1
     return Graph
 
-#graf=Overleap(kolekcija_dijelica)
-#print(graf)
-#adj_list=AdjacencyList(graf,kolekcija_dijelica)
-#print(adj_list)
+
+# graf=Overleap(kolekcija_dijelica)
+# print(graf)
+# adj_list=AdjacencyList(graf,kolekcija_dijelica)
+# print(adj_list)
 '''OUTPUT ZA : ["ACCGA","CCGAA","CGAAG","GAAGC","AAGCT"] ==> ACCGAAGCT
 [[0 1 0 0 0]
  [0 0 1 0 0]
  [0 0 0 1 0]
  [0 0 0 0 1]
  [0 0 0 0 0]]
-{'ACCGA': ['CCGAA'], 'CCGAA': ['CGAAG'], 'CGAAG': ['GAAGC'], 'GAAGC': ['AAGCT'], 'AAGCT': []}''' # ==> OK
+{'ACCGA': ['CCGAA'], 'CCGAA': ['CGAAG'], 'CGAAG': ['GAAGC'], 'GAAGC': ['AAGCT'], 'AAGCT': []}'''  # ==> OK
 
 ########################################################################################################################################
 ####################################################### 3 D ############################################################################
@@ -178,32 +184,34 @@ def Overleap(kolekcija):
 # output : put koji posjecuje svaki cvor u grafu i to samo jednom ( ako takav put postoji )
 
 # Ideja ==> De Brujin
-k=4
-text="AAGATTCTCTAC"
+k = 4
+text = "AAGATTCTCTAC"
 
-def DeBrujinGraph(text,k):
-    #print(text)
-    edges=findKmers(text,k)
-    #print(edges)
-    nodes=[]
+
+def DeBrujinGraph(text, k):
+    # print(text)
+    edges = findKmers(text, k)
+    # print(edges)
+    nodes = []
     for edge in edges:
-        node=edge[:-1]
+        node = edge[:-1]
         nodes.append(node)
-    nodes.append( edges[len(edges)-1][1:]  )
-    #print(nodes)
-    nodes_dict={}
+    nodes.append(edges[len(edges) - 1][1:])
+    # print(nodes)
+    nodes_dict = {}
     unique_nodes = list(set(nodes[:-1]))
     for unique_node in unique_nodes:
-        nodes_dict[unique_node]=[]
-    for i in range(len(nodes)-1):
-        nodes_dict[nodes[i]].append(  nodes[i+1] )
-    #print("*******************")
-    #print(nodes_dict)
-    nodes_dict=OrderedDict(sorted(nodes_dict.items()))
+        nodes_dict[unique_node] = []
+    for i in range(len(nodes) - 1):
+        nodes_dict[nodes[i]].append(nodes[i + 1])
+    # print("*******************")
+    # print(nodes_dict)
+    nodes_dict = OrderedDict(sorted(nodes_dict.items()))
     return nodes_dict
 
-#deBrujin=DeBrujinGraph(text,k)
-#print(deBrujin)
+
+# deBrujin=DeBrujinGraph(text,k)
+# print(deBrujin)
 # OUTPUT : {'CTC': ['TCT'], 'CTA': ['TAC'], 'TAC': [], 'AGA': ['GAT'], 'TTC': ['TCT'], 'GAT': ['ATT'], 'ATT': ['TTC'], 'TCT': ['CTC', 'CTA'], 'AAG': ['AGA']} => OK
 
 ########################################################################################################################################
@@ -237,40 +245,44 @@ def DeBrujinGraph(text,k):
 
 # Za svaki kmer u Patterns, povezemo prefix i sufix cvora
 
-patterns=["AAT" , "ATG", "ATG" , "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC" , "TGG", "TGT"]
+patterns = ["AAT", "ATG", "ATG", "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC", "TGG", "TGT"]
+
 
 def get_unique_k_minus_mers(Patterns):
-    nodes=[]
+    nodes = []
     for kmer in Patterns:
-        prefix=get_prefix(kmer)
-        sufix=get_sufix(kmer)
+        prefix = get_prefix(kmer)
+        sufix = get_sufix(kmer)
         nodes.append(prefix)
         nodes.append(sufix)
-    nodes=list(set(nodes))
+    nodes = list(set(nodes))
     nodes.sort()
     return nodes
 
-patterns_rosalind= ["GAGG","CAGG","GGGG","GGGA","CAGG","AGGG","GGAG"]
+
+patterns_rosalind = ["GAGG", "CAGG", "GGGG", "GGGA", "CAGG", "AGGG", "GGAG"]
+
 
 def DeBrujinGraph2(Patterns):
-    nodes=get_unique_k_minus_mers(Patterns)
-    deBrujin={}
+    nodes = get_unique_k_minus_mers(Patterns)
+    deBrujin = {}
     for node in nodes:
-        deBrujin[node]=[]
+        deBrujin[node] = []
 
     for kmer in Patterns:
-        prefix=get_prefix(kmer)
-        sufix=get_sufix(kmer)
+        prefix = get_prefix(kmer)
+        sufix = get_sufix(kmer)
         deBrujin[prefix].append(sufix)
     deBrujin = OrderedDict(sorted(deBrujin.items()))
     for key in deBrujin:
-        s=sorted(deBrujin[key])
-        deBrujin[key]=s
-    #print(deBrujin)
+        s = sorted(deBrujin[key])
+        deBrujin[key] = s
+    # print(deBrujin)
     return deBrujin
 
-#deBrujin2=DeBrujinGraph2(patterns_rosalind)
- # moj oputput : OrderedDict([('AGG', ['GGG']), ('CAG', ['AGG', 'AGG']), ('GAG', ['AGG']), ('GGA', ['GAG']), ('GGG', ['GGA', 'GGG'])]) ==> OK :)
+
+# deBrujin2=DeBrujinGraph2(patterns_rosalind)
+# moj oputput : OrderedDict([('AGG', ['GGG']), ('CAG', ['AGG', 'AGG']), ('GAG', ['AGG']), ('GGA', ['GAG']), ('GGG', ['GGA', 'GGG'])]) ==> OK :)
 
 '''input : 
 GAGG
@@ -288,6 +300,8 @@ GAG -> AGG
 GGA -> GAG
 GGG -> GGA,GGG
 '''
+
+
 ########################################################################################################################################
 #####################################   3 F ############################################################################################
 ########################################################################################################################################
@@ -314,43 +328,47 @@ def EulerianCircuit(adj):
     # adj - adjacency lista usmjerenog grafa
     # edge_count - broj izlaznih bridova cvora
     edge_count = dict()
-    for i in range(len(adj)):
+    initial_key=""
+    for key in adj:
+        initial_key=key
         # nadjimo broj bridova da bismo pratili trag neiskoristenih bridova
-        edge_count[i] = len(adj[i])
+        edge_count[key] = (len(adj[key]))
     if len(adj) == 0:
         return  # prazan graf
 
-    curr_path = [] # Spremamo vrhove u stog (stack)
-    circuit = [] # vektor u kojeg spremam konacni ciklus
-    curr_path.append(0) # mozemo poceti od bilo kojeg cvora, nije bitno
-    curr_v = 0  # trenutni cvor
+    curr_path = []  # Spremamo vrhove u stog (stack)
+    circuit = []  # vektor u kojeg spremam konacni ciklus
+    curr_path.append(initial_key)  # mozemo poceti od bilo kojeg cvora, nije bitno
+    curr_v = initial_key  # trenutni cvor
     while len(curr_path):
-        if edge_count[curr_v]: # Ako je preostao brid
-            curr_path.append(curr_v) # dodajem cvor
-            next_v = adj[curr_v][-1] # Trazim iduci cvor koristeci brid
-            edge_count[curr_v] -= 1 # i onda oduzimam taj brid
-            adj[curr_v].pop() # i izbacujem taj brid
-            curr_v = next_v # micem se na iduci cvor
+        if edge_count[curr_v]:  # Ako je preostao brid
+            curr_path.append(curr_v)  # dodajem cvor
+            next_v = adj[curr_v][-1]  # Trazim iduci cvor koristeci brid
+            edge_count[curr_v] -= 1  # i onda oduzimam taj brid
+            adj[curr_v].pop()  # i izbacujem taj brid
+            curr_v = next_v  # micem se na iduci cvor
 
-        else: # back-track za trazenje ostatka ciklusa
+        else:  # back-track za trazenje ostatka ciklusa
             circuit.append(curr_v)
             # Back-tracking
             curr_v = curr_path[-1]
             curr_path.pop()
 
-    for i in range(len(circuit) - 1, -1, -1):
-        print(circuit[i], end="")
-        if i:
-            print(" -> ", end="")
-    circuit.reverse() # treba samo obrnit redoslijed
+    #for i in range(len(circuit) - 1, -1, -1):
+    #    print(circuit[i], end="")
+    #    if i:
+    #        print(" -> ", end="")
+    circuit.reverse()  # treba samo obrnit redoslijed
     return circuit
 
+
 def convert_graph_to_input(graph):
-    lista=[]
+    lista = []
     for key in graph:
         lista.append(graph[key])
-    #print(lista)
+    # print(lista)
     return lista
+
 
 '''ROSALIND primjer :
 0 -> 3
@@ -363,50 +381,106 @@ def convert_graph_to_input(graph):
 7 -> 9
 8 -> 7
 9 -> 6'''
-G= {
-    0: [3],
-    1: [0],
-    2: [1,6],
-    3: [2],
-    4: [2],
-    5: [4],
-    6: [5,8],
-    7: [9],
-    8: [7],
-    9: [6]
+G = {
+    '0': ['3'],
+    '1': ['0'],
+    '2': ['1', '6'],
+    '3': ['2'],
+    '4': ['2'],
+    '5': ['4'],
+    '6': ['5', '8'],
+    '7': ['9'],
+    '8': ['7'],
+    '9': ['6']
 }
 #adj2=convert_graph_to_input(G)
-#eulerova_tura=EulerianCircuit(adj2)
+#eulerova_tura=EulerianCircuit(G)
 #print()
-#6->8->7->9->6->5->4->2->1->0->3->2->6 # rosalind rjesenje
- # moje rjesenje : 0 -> 3 -> 2 -> 6 -> 8 -> 7 -> 9 -> 6 -> 5 -> 4 -> 2 -> 1 -> 0  ... OK
+# 6->8->7->9->6->5->4->2->1->0->3->2->6 # rosalind rjesenje
+# moje rjesenje : 0 -> 3 -> 2 -> 6 -> 8 -> 7 -> 9 -> 6 -> 5 -> 4 -> 2 -> 1 -> 0  ... OK
+# 9 -> a -> 5 -> 4 -> 2 -> 1 -> 0 -> 3 -> 2 -> a -> 8 -> 7 -> 9  ==> OK
+########################################################################################################################################
+########################################### 3 G #######################################################################################
+########################################################################################################################################
+# Nadji Eulerov put (path)
+# korisno : https://charlesreid1.github.io/graphs-for-bioinformatics-part-2-finding-eulerian-paths.html#checking-for-eulerian-paths-and-cycles
+'''rosalind input : 
+0 -> 2
+1 -> 3
+2 -> 1
+3 -> 0,4
+6 -> 3,7
+7 -> 8
+8 -> 9
+9 -> 6
+'''
+G = {
+    '0': ['2'],
+    '1': ['3'],
+    '2': ['1'],
+    '3': ['0', '4'],
+    '6': ['3', '7'],
+    '7': ['8'],
+    '8': ['9'],
+    '9': ['6']}
+# 1. dict : cvor i broj izlaznih bridova
+# 2. dict : cvor i broj ulaznih bridova
+# nadji sve vrhove- jedinstvene
+
+def out_edges(graph):
+    outedges={}
+    for key in graph:
+        outedges[key]=len(graph[key])
+    #print(outedges)
+    return outedges
+
+def in_edges(graph):
+    ins=[]
+    for key in graph:
+        lista=graph[key]
+        for el in lista:
+            ins.append(el)
+    uniques=list(set(ins))
+    inedges={}
+    for unique in uniques:
+        inedges[unique]=ins.count(unique)
+    return inedges
+
+def unique_nodes(graph):
+    outs=out_edges(graph)
+    ins=in_edges(graph)
+    all_nodes=list( set( list ( outs) + list(ins) ))
+    all_nodes.sort()
+    return all_nodes
+
+def EulerianPath(graph):
+    all_nodes=unique_nodes(graph)
+    outs=out_edges(graph)
+    ins=in_edges(graph)
+    second=""
+    first=""
+    for node in all_nodes:
+          balance = outs.get(node,0) - ins.get(node, 0)
+          if(balance==1): # vise izlaznih nego ulaznih => mora biti second
+              second=node
+          if(balance==-1):
+              first=node
+    # sad imamo w=6, v=4, moramo se vratiti iz w u v (iz 6 u 4)
+    if(first not in graph):
+        graph[first]=[second]
+    else:
+        graph[first].append(second)
+    res=EulerianCircuit(graph)
+    # uzmi sve do 4 i sve od 6 i spoji
+    index_first= res.index(first)
+    index_second=res.index(second)
+    euler_path= res[index_second:] + res[:index_first]
+    return euler_path
+
+#eulerian_path = EulerianPath(G)
+#print(eulerian_path)
+# moj output : ['6', '7', '8', '9', '6', '3', '0', '2', '1', '3', '4'] => OK
+# rosalind : 6->7->8->9->6->3->0->2->1->3->4
 ########################################################################################################################################
 ########################################################################################################################################
 ########################################################################################################################################
-
-
-
-kolekcija_dijelica=["AAT", "ATG", "ATG", "ATG", "CAT", "CCA", "GAT", "GCC", "GGA", "GGG", "GTT", "TAA", "TGC", "TGG", "TGT"]
-
-def get_sufixes(kmer):
-    prefixi=[]
-    for i in range(1,len(kmer)):
-        prefix=kmer[i:]
-        prefixi.append(prefix)
-
-
-    #print(prefixi)
-    return prefixi
-
-def get_prefixes(kmer):
-    sufixi=[]
-    for i in range(1,len(kmer)):
-        prefix=kmer[:i]
-        sufixi.append(prefix)
-    sufixi.reverse()
-    #print(sufixi)
-    return sufixi
-#get_prefixes("ATGTCGT")
-#get_sufixes("ATGTCGT")
-
-
