@@ -510,5 +510,46 @@ patterni = ["CTTA","ACCA","TACC","GGCT","GCTT","TTAC" ]
 #print(rez) #  GGCTTACCA ==> OK
 
 ########################################################################################################################################
+####################################################### 3 I ##############################################################################
+########################################################################################################################################
+# k-Universal Circular String Problem  ==> DeBrujin( BinaryStrings(k) )
+def save_the_array(arr,n,bigArr):
+    text=""
+    for i in range(0,n):
+        text+=str(arr[i])
+    bigArr.append(text)
+    return bigArr
+
+def BinaryStrings(n, arr, i,res):
+    if i == n:
+        res=save_the_array(arr,n,res)
+        return
+    # First assign "0" at ith position and try for all other permutations for remaining positions
+    arr[i] = 0
+    BinaryStrings(n, arr, i + 1,res)
+
+    # And then assign "1" at ith position and try for all other permutations for remaining positions
+    arr[i] = 1
+    BinaryStrings(n, arr, i + 1,res)
+    return res
+
+def CircularStringProblem(k):
+    arr=[None] *k
+    bstrings=[]
+    binaries=BinaryStrings(k,arr,0,bstrings)
+    res=DeBrujinGraph2(binaries)
+    cycle=EulerianCircuit(res)
+    cycle = cycle[:-(k - 1)]
+    genome = cycle[0][:-1]
+    for i in cycle:
+        genome += i[-1]
+    return genome
+
+k=4
+#circularString=CircularStringProblem(k)
+#print(circularString)   # 1111011001010000 ==> nije kao rosalind, ali je isto tocno
+
 ########################################################################################################################################
 ########################################################################################################################################
+########################################################################################################################################
+
