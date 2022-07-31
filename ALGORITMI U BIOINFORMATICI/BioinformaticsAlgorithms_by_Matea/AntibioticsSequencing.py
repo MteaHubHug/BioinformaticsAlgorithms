@@ -102,7 +102,8 @@ def get_peptides(RNA_Pattern):
     peptids=[]
     for i in range(0,len(RNA_Pattern),3):
         peptid= RNA_Pattern[i : i+3]
-        peptids.append(peptid)
+        if(len(peptid)==3):
+           peptids.append(peptid)
     return peptids
 
 def ProteinTranslation(RNA_Pattern, geneticCode):
@@ -119,6 +120,95 @@ def ProteinTranslation(RNA_Pattern, geneticCode):
 #MAMAPRTEINSTRING ==> OK :)
 
 
+###############################################################################
+################################ 4 B ##########################################
+###############################################################################
+# Peptide Encoding Problem
+
+DNA="ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA"
+amoinoacid="MA"
+
+
+def ReverseComplement(Pattern):
+    Reverse=""
+    Pattern = Pattern.upper()
+    for nukleotid in Pattern:
+        if(nukleotid=="A"): Reverse+="T"
+        elif(nukleotid=="C"): Reverse+="G"
+        elif(nukleotid=="G"): Reverse+="C"
+        else : Reverse+="A"
+    Reverse = Reverse[::-1]
+    return  Reverse
+
+def DNA2RNA(DNA):
+    rna=""
+    for nukleotid in DNA:
+        if(nukleotid=="A"):
+          rna+="A"
+        elif(nukleotid=="C"):
+          rna+="C"
+        elif(nukleotid=="G"):
+          rna+="G"
+        else:
+          rna+="U"
+    return rna
+
+def get_start_kodon(aminostring,aminoacid):
+    l=len(aminoacid)
+    indexi=[]
+    print(aminostring,"************")
+    for i in range(len(aminostring)-l+1):
+        am=aminostring[i:i+l]
+        if(am==aminoacid):
+            indexi.append(i)
+    return indexi
+
+def PeptideEncoding(DNA,aminoacid):
+    dna1=DNA
+    dna2=DNA[1:]
+    dna3=DNA[2:]
+
+    reverse1=ReverseComplement(dna1)
+    reverse2=reverse1[1:]
+    reverse3=reverse1[2:]
+    rna1=DNA2RNA(dna1)
+    rna2 = DNA2RNA(dna2)
+    rna3 = DNA2RNA(dna3)
+    rna4 = DNA2RNA(reverse1)
+    rna5 = DNA2RNA(reverse2)
+    rna6 = DNA2RNA(reverse3)
+
+    pepts=get_peptides(rna5)
+    amino1=ProteinTranslation(rna1,GeneticCode)
+    amino2=ProteinTranslation(rna2,GeneticCode)
+    amino3=ProteinTranslation(rna3,GeneticCode)
+    amino4 = ProteinTranslation(rna4, GeneticCode)
+    amino5 = ProteinTranslation(rna5, GeneticCode)
+    amino6 = ProteinTranslation(rna6, GeneticCode)
+    aminoacides=[amino1,amino2,amino3]
+    aminoacides_from_reversed=[amino4,amino5,amino6]
+    res=[]
+    for amino in aminoacides:
+        indexi=get_start_kodon(amino,aminoacid)
+        if(len(indexi)>0):
+            for ind in indexi:
+                real_ind=int(ind/3)
+                pept=DNA[real_ind : real_ind + len(aminoacid)*3]
+                res.append(pept)
+    aminoacid_reversed=aminoacid[::-1]
+    for amino in aminoacides_from_reversed:
+        indexi = get_start_kodon(amino, aminoacid_reversed)
+        if (len(indexi) > 0):
+            for ind in indexi:
+                real_ind=len(amino)-ind
+                real_ind=int(real_ind/3)
+                pept = DNA[real_ind: real_ind + len(aminoacid) * 3]
+                pept= ReverseComplement(pept)
+                res.append(pept)
+    return res
+
+#peptid_encoded=PeptideEncoding(DNA,amoinoacid)
+#print(peptid_encoded  # OUTPUT : ['ATGGCC', 'ATGGCC', 'GGCCAT']  ==> OK
 ###############################################################################
 ###############################################################################
 ###############################################################################

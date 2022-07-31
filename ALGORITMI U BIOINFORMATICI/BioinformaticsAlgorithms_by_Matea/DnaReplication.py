@@ -65,7 +65,7 @@ def ReverseComplement(Pattern):
     Pattern = Pattern.upper()
     for nukleotid in Pattern:
         if(nukleotid=="A"): Reverse+="T"
-        elif(nukleotid=="C"): Reverse+"G"
+        elif(nukleotid=="C"): Reverse+="G"
         elif(nukleotid=="G"): Reverse+="C"
         else : Reverse+="A"
     Reverse = Reverse[::-1]
