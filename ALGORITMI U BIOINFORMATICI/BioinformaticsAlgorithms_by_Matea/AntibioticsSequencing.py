@@ -376,19 +376,8 @@ teoretski_spektar=GeneratingTheoreticalSpectrum(Aminoacid_peptid_example_rosalin
 
 
 
-def Mass(Peptide,mass_dict): # total mass
-    total_mass=0
-    for p in Peptide:
-        total_mass += mass_dict[p]
-    return total_mass
 
-def ParentMass(Spectrum):
-    max=0
-    for peptide in Spectrum:
-        masa=Mass(peptide,mass)
-        if(masa>max):
-            max=masa
-    return max
+
 
 def BFCyclopeptideSequencing(Spectrum):
     for peptide in Spectrum:
@@ -428,3 +417,78 @@ m=1024
 ###########################################################################################################################
 ################################################### 4 E ####################################################################
 ##########################################################################################################################
+'''CYCLOPEPTIDESEQUENCING(Spectrum)
+        Peptides ← a set containing only the empty peptide
+        while Peptides is nonempty
+            Peptides ← Expand(Peptides)
+            for each peptide Peptide in Peptides
+                if Mass(Peptide) = ParentMass(Spectrum)
+                    if Cyclospectrum(Peptide) = Spectrum
+                        output Peptide
+                    remove Peptide from Peptides
+                else if Peptide is not consistent with Spectrum
+                    remove Peptide from Peptides'''
+def Mass(Peptide): # total mass
+    total_mass=0
+    for p in Peptide:
+        total_mass += p
+    return total_mass
+
+def ParentMass(Spectrum):
+    max_mass=max(Spectrum)
+    return max_mass
+
+def expand(peptides,masses):
+    return [peptide+[mass] for peptide in peptides for mass in masses]
+
+def linearSpectrum(peptide):
+    def get_pairs():
+        return [(i,j) for i in range(len(peptide)) for j in range(len(peptide)+1) if i<j]
+    result=[sum(peptide[i:j]) for (i,j) in get_pairs()]
+    result.append(0)
+    result.sort()
+    return result
+
+def find_cyclopeptide_sequence(spectrum):
+    def isConsistent(peptide):
+        # Determine number of items in spect that match specified element
+        def count(element, spect):
+            return len([s for s in spect if s == element])
+
+        peptide_spectrum = linearSpectrum(peptide)
+        for element in peptide_spectrum:
+            if count(element, peptide_spectrum) > count(element, spectrum):
+                return False
+        return True
+
+    def cycloSpectrum(peptide):
+        def get_pairs(index_range):
+            return [(i, j) for i in index_range for j in range(i, i + len(index_range)) if j != i]
+        augmented_peptide = peptide + peptide
+        result = [sum(augmented_peptide[a:b]) for (a, b) in get_pairs(range(len(peptide)))]
+        result.append(0)
+        result.append(sum(peptide))
+        result.sort()
+        return result
+
+    peptides = [[]]
+    output = []
+    masses = list(set(mass.values()))
+
+    while len(peptides) > 0:
+        next_peptides = []
+        for peptide in expand(peptides, masses):
+            if Mass(peptide) == ParentMass(spectrum):
+                if cycloSpectrum(peptide) == spectrum:
+                    output.append(peptide)
+            else:
+                if isConsistent(peptide):
+                    next_peptides.append(peptide)
+        peptides = next_peptides
+
+    return output
+
+spektar=[0, 113, 128, 186, 241, 299, 314, 427]
+#rez=find_cyclopeptide_sequence(spektar)
+# 186-128-113 186-113-128 128-186-113 128-113-186 113-186-128 113-128-186
+#print(rez)
