@@ -363,5 +363,68 @@ teoretski_spektar=GeneratingTheoreticalSpectrum(Aminoacid_peptid_example_rosalin
 # 0 113 114 128 129 227 242 242 257 355 356 370 371 484
 # moj  output : [0, 113, 114, 128, 129, 227, 242, 242, 257, 355, 356, 370, 371, 484] ==> OK
 ##################################################################################################################
+###################################### 4 D ########################################################################
 ##################################################################################################################
-##################################################################################################################
+'''# Cyclopeptide Sequencing Problem  - obrisi
+# Za dani Ideal Sprectrum, nadji ciklicki peptide čiji teoretski spektar matcha eksperimentalni spektar
+# Input : kolekcija (moguća ponavljanja) integera "Spectrum" koji odgovaraju Ideal Spectrumu
+# Output : String aminokiseline "Peptide" t.d. CycloSpectrum(Peptide)==Spectrum  (ako takav postoji)
+'''
+'''def CycloSpectrum(Peptide):
+    res=GeneratingTheoreticalSpectrum(Peptide,mass)
+    return res
+
+
+
+def Mass(Peptide,mass_dict): # total mass
+    total_mass=0
+    for p in Peptide:
+        total_mass += mass_dict[p]
+    return total_mass
+
+def ParentMass(Spectrum):
+    max=0
+    for peptide in Spectrum:
+        masa=Mass(peptide,mass)
+        if(masa>max):
+            max=masa
+    return max
+
+def BFCyclopeptideSequencing(Spectrum):
+    for peptide in Spectrum:
+        if(Mass(peptide,mass) == ParentMass(Spectrum)):
+            if(Spectrum== CycloSpectrum(peptide)):
+                return peptide'''
+
+
+def get_all_masses(masses):
+    res= masses.values()
+    res=list(set(res))
+    res.sort()
+    return res
+
+def get_all_combos(mass, all_masses, ctr):
+    if mass in ctr:
+        return ctr[mass]
+    if mass < 0:   return 0
+    if mass == 0:  return 1
+
+    ctr[mass] = 0
+    for aa_mass in all_masses:
+        ctr[mass] += get_all_combos(mass - aa_mass, all_masses, ctr)
+
+    return ctr[mass]
+
+def CountingPeptidesWithGivenMass(m):
+    all_masses=get_all_masses(mass)
+    counter={}
+    res=1
+    res= get_all_combos(m,all_masses,counter)
+    return res
+m=1024
+#combosNum=CountingPeptidesWithGivenMass(m)
+#print(combosNum) # 14712706211 ==> OK
+
+###########################################################################################################################
+################################################### 4 E ####################################################################
+##########################################################################################################################
