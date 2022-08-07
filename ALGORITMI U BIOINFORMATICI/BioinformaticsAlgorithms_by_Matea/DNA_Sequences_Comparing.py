@@ -185,3 +185,41 @@ def ManhattanTourist(n,m,Down,Right):
 #####################################################################################################################################################
 ############################################################## 5 E ##################################################################################
 #####################################################################################################################################################
+'''
+Sto je krivo s LCS (Longest Commont Sequence) scoring modelom?
+Moze se dogoditi da pretjeramo s alignmentiranjem / poravnavanjem tako sto dodajemo previse indela ( praznine) i tako se gubi originalna bioloska struktura 
+Kod LCS scoring modela, nista nas ne sprjecava da dodamo ogroman broj indela kako bismo izgradili sto bolji LCS model
+=> U originalnoj alignment igri smo nagradjivali bodovima sobole koji se matchaju, ali trebali bismo uvesti i neku vrstu penala za neke indele i mismatchove (nepodudarnosti)
+
+~~~SCORING MATRICE~~~~
+Da bismo generalizirali alignment scoring model, jos uvijek nagradjujemo match s +1,
+ali takodjer penaliziramo mismatch s konstantom  µ (mismatch penalty) 
+te penaliziramo indele s konstantom simga (indel penalty) 
+==>
+ALIGNMENT SCORE = #matches - µ* #mismatches - sigma * #indels
+Primjer. Za µ=1, sigma=2 , alignment score= -4
+A   T  -  G  T  T  A  T  A
+A   T  C  G  T  -  C  -  C
+---------------------------
++1 +1 -2 +1 +1 -2 -1 -2 -1 = -4
+
+Biolozi su kasnije popravili cost funkciju tako da dopusta da su neke mutacije
+vjerojatnije od drugih
+=> Zbog toga se mismatch penali i indel penali razlikuju za razlicite simbole
+SCORING MATRIX -  (k+1)×(k+1) matrica  (+1 zato sto ukljucujemo u indel)
+koja sadrzi nagrade i penale 
+Pr : za k=4 : sigma=s 
+   A  C  G  T  - 
+A +1 -µ -µ -µ -s
+C -µ +1 -µ -µ -s
+G -µ -µ +1 -µ -s
+T -µ -µ -µ +1 -s
+- -s -s -s -s
+'''
+# GLOBAL ALIGNMENT PROBLEM
+# Nadji highest-scoring alignment dva stringa gdje su bodovi definirani Scoring matricom
+# input : dva stringa i scoring matrica "Score"
+# output : poravnanje dva stringa ciji je alignment score maksimiziran (prema matrici "Score")
+       # uzevsi u obzir sva moguca poravnanja ta dva stringa
+
+# def GlobalAlignmentProblem
