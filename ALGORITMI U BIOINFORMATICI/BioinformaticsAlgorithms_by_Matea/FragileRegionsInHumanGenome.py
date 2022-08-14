@@ -49,3 +49,56 @@ def breakpoint_count(permutation):
 
 #brojBreakpoints=breakpoint_count(P)
 #print(brojBreakpoints) ### =8
+
+##############################################################################################################################################################
+####################################################################  6 C #################################################################################
+##############################################################################################################################################################
+
+from collections import defaultdict
+
+
+def Two_Break_Distance(P, Q):
+    '''Returns the 2-Break Distance of Circular Chromosomes P and Q.'''
+
+    # Construct the break point graph of P and Q.
+    graph = defaultdict(list)
+    for perm_cycle in P+Q:
+        n = len(perm_cycle)
+        for i in range(n):
+            # Add the edge between consecutive items (both orders since the breakpoint graph is undirected).
+            # Note: Modulo n in the higher index for the edge between the last and first elements.
+            graph[perm_cycle[i]].append(-1*perm_cycle[(i+1) % n])
+            graph[-1*perm_cycle[(i+1) % n]].append(perm_cycle[i])
+
+    # Traverse the breakpoint graph to get the number of connected components.
+    component_count = 0
+    remaining = set(graph.keys())
+    while remaining:
+        component_count += 1
+        queue = {remaining.pop()}  # Undirected graph, so we can choose a remaining node arbitrarily.
+        while queue:
+            # Select an element from the queue and get its remaining children.
+            current = queue.pop()
+            new_nodes = {node for node in graph[current] if node in remaining}
+            # Add the new nodes to the queue, remove them from the remaining nodes.
+            queue |= new_nodes
+            remaining -= new_nodes
+
+    # Theorem: d(P,Q) = blocks(P,Q) - cycles(P,Q)
+    return sum(map(len,P)) - component_count
+
+
+'''
+(+1 +2 +3 +4 +5 +6)
+(+1 -3 -6 -5)(+2 -4)
+'''
+
+P=[[+1, +2, +3, +4, +5, +6]]
+Q=[[+1, -3, -6, -5],[+2, -4]]
+#rez=Two_Break_Distance(P,Q)
+#print(rez) # rez=3 ==> OK
+
+
+##############################################################################################################################################################
+####################################################################  6 F #################################################################################
+##############################################################################################################################################################
