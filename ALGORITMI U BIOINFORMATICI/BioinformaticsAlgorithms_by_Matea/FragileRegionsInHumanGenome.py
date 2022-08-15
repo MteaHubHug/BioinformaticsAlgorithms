@@ -132,3 +132,24 @@ kromosom=[+1, -2, -3, +4]
 ##############################################################################################################################################################
 ####################################################################  6 G #################################################################################
 ##############################################################################################################################################################
+'''
+Cycle To Chromosome Problem (Ciklicki graf => Kromosom) ovo je inverzna funkcija prethodne
+input : sekvenca "Nodes" koja se sastoji od integera izmedju 1 i 2n
+output : kromosom "Chromosome" koji sadrzi n synteny blokova sto su rezultat funkcije CycleToChromosome(Nodes)
+'''
+# ovo samo prema pseudokodu iz knjige
+def CycleToChromosome(Nodes):
+    Chromosome = []
+    iteracija = iter(Nodes)
+    for i in iteracija:
+        a, b = (i, next(iteracija))
+        if a < b:
+            Chromosome.append(b // 2)
+        else:
+            Chromosome.append(-a // 2)
+    return Chromosome
+
+
+sekvencaNodes=[1, 2, 4, 3, 6, 5, 7, 8]
+#rez=CycleToChromosome(sekvencaNodes)
+#print(rez)  # [1, -2, -3, 4] -- OK
