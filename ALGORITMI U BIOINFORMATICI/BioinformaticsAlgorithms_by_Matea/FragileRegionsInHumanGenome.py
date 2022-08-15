@@ -149,7 +149,96 @@ def CycleToChromosome(Nodes):
             Chromosome.append(-a // 2)
     return Chromosome
 
-
 sekvencaNodes=[1, 2, 4, 3, 6, 5, 7, 8]
 #rez=CycleToChromosome(sekvencaNodes)
 #print(rez)  # [1, -2, -3, 4] -- OK
+
+##############################################################################################################################################################
+####################################################################  6 H #################################################################################
+##############################################################################################################################################################
+
+'''
+Colored Edges Problem (Problem obojanih bridova) - pronadji Obojene Bridove u genomu
+input: genom P
+output : kolekcija obojenih bridova u grafu genoma P u obliku (x,y)
+'''
+def ColoredEdges(P):
+    Edges = []
+    for Chromosome in P:
+        Nodes = ChromosomeToCycle(Chromosome)
+        for j in range(len(Chromosome)):
+            edge=(Nodes[2*j-1],Nodes[2*j])
+            Edges.append(edge)
+    Edges.sort()
+    return Edges
+
+P=[[+1, -2, -3],[+4, +5, -6]]
+#rez=ColoredEdges(P)
+#print(rez)  # (2, 4), (3, 6), (5, 1), (8, 9), (10, 12), (11, 7)  =>OK
+
+'''def ColoredEdges(P):
+    Edges = []
+    for Chromosome in P:
+        Nodes = ChromosomeToCycle(Chromosome)
+        it = iter(Nodes[1:]+[Nodes[0]])
+        for i in it:
+            Edges.append((i,next(it)))
+    return Edges'''
+
+##############################################################################################################################################################
+####################################################################  6 I #################################################################################
+##############################################################################################################################################################
+'''
+Graph To Genome Problem
+input: Obojani bridovi grafa genoma
+output : genom koji odgovara grafu genoma
+'''
+
+def split_edges_to_chromosomes(edges):
+    final_pairs = []
+    for i, pair in enumerate(edges):
+        if pair[0] > pair[1]:
+            final_pairs.append(i)
+
+    chromosomes = []
+    previous = 0
+    for end in final_pairs:
+        chromosomes.append(edges[previous : (end + 1)])
+        previous = end + 1
+    return chromosomes
+
+def colored_edges_to_cycle(edges):
+    cycle = []
+    for i in range(len(edges) - 1):
+        cycle.extend([edges[i][1], edges[i + 1][0]])
+    final = [edges[-1][1], edges[0][0]]
+    final.extend(cycle)
+    return final
+
+def GraphToGenome(GenomeGraph):
+    P=[]
+    chromosome_edges = split_edges_to_chromosomes(GenomeGraph)
+    for edge in chromosome_edges:
+        cycle=colored_edges_to_cycle(edge)
+        Chromosome=CycleToChromosome(cycle)
+        P.append(Chromosome)
+    return P
+
+grafGenoma=[(2, 4), (3, 6), (5, 1), (7, 9), (10, 12), (11, 8)]
+#rez=GraphToGenome(grafGenoma)  # (+1 -2 -3)(-4 +5 -6)
+#print(rez)
+
+
+##############################################################################################################################################################
+####################################################################  6 J #################################################################################
+##############################################################################################################################################################
+
+'''
+2-Break On Genome Graph Problem
+input: obojani bridovi grafa genoma "GenomeGraph" - s indeksima i  i'  j  j'
+output: obojani bridovi grafa genoma koji su rezultat funkcije 2-break()
+
+Sample Dataset
+(2, 4), (3, 8), (7, 5), (6, 1)
+1, 6, 3, 8
+'''
