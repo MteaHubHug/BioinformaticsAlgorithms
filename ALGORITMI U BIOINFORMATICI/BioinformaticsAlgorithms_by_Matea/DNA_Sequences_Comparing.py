@@ -1,3 +1,6 @@
+from reading_tasks_text import *
+
+
 '''
 Recimo da imamo 3 duga niza, segmenta za koja znamo da otprilike rade iste stvari
 ... npr kao automobili, svi imaju 4 kotaca, volan itd, i svi nam koriste za voznju,
@@ -141,7 +144,16 @@ money=40
 coins=[1,5,10,20,25,50]
 #minNumCoins=DPChange(money,coins)
 #print(minNumCoins) #### => rez =2 ==> OK
+'''
+infile= open_file("rosalind_ba5a.txt")
+money=int(infile[0])
+coins=infile[1].split(",")
+coins = [int(i) for i in coins]
+minNumCoins=DPChange(money,coins)
+print(minNumCoins)
 
+
+'''
 #####################################################################################################################################################
 ############################################################## 5 B ##################################################################################
 #####################################################################################################################################################
@@ -181,6 +193,33 @@ def ManhattanTourist(n,m,Down,Right):
 
 #put=ManhattanTourist(n,m,Down,Right)
 #print(put)  # 34.0 ==> ok
+
+
+'''
+
+infile= open_file("rosalind_ba5b.txt")
+nums=infile[0].split(" ")
+n=int(nums[0])
+m=int(nums[1])
+flag=0
+Down=[]
+Right=[]
+for l in infile[1:]:
+    if(l!="-" and flag==0):
+        row=l.split(" ")
+        row = [int(i) for i in row]
+        Down.append(row)
+    elif(l=="-"):
+        flag=1
+    elif(l!="-" and flag==1):
+        row = l.split(" ")
+        row = [int(i) for i in row]
+        Right.append(row)
+
+put=ManhattanTourist(n,m,Down,Right)
+print(put)
+
+'''
 
 #####################################################################################################################################################
 ############################################################## 5 E ##################################################################################
@@ -265,18 +304,20 @@ def global_alignment(seq1, seq2, score_matrix, sig):
 
 
 if __name__ == '__main__':
-    with open('global_alignment.txt') as f:
+    path5e= r"C:\Users\Matea\Desktop\ALGORITMI U BIOINFORMATICI\BioinformaticsAlgorithms_by_Matea\tekstovi_zadataka\rosalind_ba5e.txt"
+    with open(path5e) as f:
         seq1 = f.readline().strip()
         seq2 = f.readline().strip()
     with open('BLOSUMM64.txt') as f1:
         lines = [line.strip().split() for line in f1.readlines()]
         score_matrix = {(i[0], i[1]): int(i[2]) for i in lines}
     penalty = 5
-    #alignment = '\n'.join(global_alignment(seq1, seq2, score_matrix, penalty))
-    #print(alignment)
+    alignment = '\n'.join(global_alignment(seq1, seq2, score_matrix, penalty))
+    print(alignment)
 # odkomentiraj print i alignment za output
 '''output : 
 8
 PLEASANTLY
 -MEA--N-LY
 '''
+
