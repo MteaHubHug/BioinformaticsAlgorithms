@@ -312,8 +312,8 @@ if __name__ == '__main__':
         lines = [line.strip().split() for line in f1.readlines()]
         score_matrix = {(i[0], i[1]): int(i[2]) for i in lines}
     penalty = 5
-    alignment = '\n'.join(global_alignment(seq1, seq2, score_matrix, penalty))
-    print(alignment)
+    #alignment = '\n'.join(global_alignment(seq1, seq2, score_matrix, penalty))
+    #print(alignment)
 # odkomentiraj print i alignment za output
 '''output : 
 8
