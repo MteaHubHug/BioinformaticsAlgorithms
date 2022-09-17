@@ -249,7 +249,7 @@ def get2BreakOnGenomeGraph(GenomeGraph,i0,i1,j0,j1):
         w,z=y
         return (u ==w and v==z) or (w==v and u==z)
     removed = [x for x in GenomeGraph if not eq(x,(i0,i1)) and not eq(x,(j0,j1))]
-    return removed +[(i0,j0)] + [(i1,j1)]
+    return removed + [(i0,j0)] + [(i1,j1)]
 
 grafGranoma=[(2, 4), (3, 8), (7, 5), (6, 1)]
 i=1
