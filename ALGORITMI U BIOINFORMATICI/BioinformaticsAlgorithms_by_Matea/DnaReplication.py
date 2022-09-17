@@ -1,3 +1,5 @@
+from reading_tasks_text import *
+
 # Finding origin of replication problem
 # U originu pocinje replikacija DNA, zato je vazno pronaci gdje se nalazi.
 # Ova funkcija broji koliko se puta dani Pattern (k-mer nukleotida) nalazi u danom Tekstu (DNA Genomu)
@@ -18,6 +20,14 @@ def PatternCount(Text, Pattern):
 #Pattern= "ACTAT"
 #res = PatternCount(Text,Pattern)
 #print(res) # res = 3
+
+#veliki dataset :
+#infile= open_file("rosalind_ba1a.txt")
+#Text=infile[0]
+#Pattern=infile[1]
+#res=PatternCount(Text,Pattern)
+#print(res)  # 27
+
 
 # Frequent Words Problem - Find the most frequent k-mers in a string
 # Ova funkcija nalazi najfrekventnije k-mere u DNA genomu -
@@ -51,6 +61,12 @@ def FrequentWords(Text, k):
 #res = FrequentWords(Text, k)
 #print(res)    # ['atgatcaag', 'ctcttgatc', 'tcttgatca', 'cttgatcat']
 
+#infile= open_file("rosalind_ba1b.txt")
+#Text=infile[0]
+#k=int(infile[1])
+#res=FrequentWords(Text,k)
+#print(res)  # ['ACTCCGTAAGTCCC', 'CTCCGTAAGTCCCT', 'TCCGTAAGTCCCTT', 'CCGTAAGTCCCTTA', 'CGTAAGTCCCTTAT']   ok
+
 ###################################################################################################
 
 # Reverse Complement
@@ -75,6 +91,10 @@ def ReverseComplement(Pattern):
 #Reverse = ReverseComplement(Pattern)
 #print(Reverse)
 
+#infile= open_file("rosalind_ba1c.txt")
+#Pattern= infile[0]
+#Reverse=ReverseComplement(Pattern)
+#print(Reverse)
 
 #####################################################################
 # Clump finding problem
@@ -94,8 +114,8 @@ def find_k_mers(Text, k):
 def ClumpFinding(Genome, k, L, t):
     clums=[]
     k_mers= find_k_mers(Genome,k)
-    for i in range(len(Genome) - k +1 ):
-        print("k-mer : ", k_mers[i])
+    #for i in range(len(Genome) - k +1 ):
+        #print("k-mer : ", k_mers[i])
 
     cnts=[]
 
@@ -109,8 +129,8 @@ def ClumpFinding(Genome, k, L, t):
                 cnts[l]+=1
         l+=1
 
-    for i in range(len(cnts)):
-        print(" cnt :: ", cnts[i])
+    #for i in range(len(cnts)):
+        #print(" cnt :: ", cnts[i])
 
     for i in range(len(cnts)):
         if(cnts[i]==t): clums.append(k_mers[i])
@@ -127,6 +147,21 @@ def ClumpFinding(Genome, k, L, t):
 
 #for clum in klamz:
 #    print(clum)    ### TGCA, CCCC
+
+# big dataset :
+#infile= open_file("rosalind_ba1e.txt")
+#genom=infile[0]
+#nums=infile[1]
+#nums=nums.split(" ")
+#k=int(nums[0])
+#L=int(nums[1])
+#t=int(nums[2])
+
+#klamz = ClumpFinding(genom, k, L, t)
+
+#for clum in klamz:
+#   print(clum)
+
 
 ####################################################################
 
@@ -245,11 +280,16 @@ def HammingDistance(p,q):
     HD= sum(c1 != c2 for c1, c2 in zip(p, q))
     return HD
 
-p='AGATGG'
-q='AGATAA'
-HammingDist=HammingDistance(p,q)
+#p='AGATGG'
+#q='AGATAA'
+#HammingDist=HammingDistance(p,q)
 #print(HammingDist)
 
+#infile= open_file("rosalind_ba1g.txt")
+#p=infile[0]
+#q=infile[1]
+#HammingDist=HammingDistance(p,q)
+#print(HammingDist )
 
 # 1 H Approximate Pattern Matching Problem
 # Find all approximate occurrences of a pattern in a string
@@ -276,6 +316,8 @@ def Prefix(Pattern):
     patt=Pattern[:-1]
     return  patt
 
+
+# 1L
 def PatternToNumber(Pattern):
     if(len(Pattern)==0) : return 0
     symb=LastSymbol(Pattern)
@@ -283,6 +325,9 @@ def PatternToNumber(Pattern):
     return 4 * PatternToNumber(prefix) + SymbolToNumber(symb)
 
 ### print(PatternToNumber("GT")) # =11
+#infile= open_file("rosalind_ba1l.txt")
+#Pattern=infile[0]
+#print(PatternToNumber(Pattern))
 
 def NumberToSymbol(number):
     symb="X"
@@ -292,6 +337,8 @@ def NumberToSymbol(number):
     elif(number==3): symb="T"
     return symb
 
+
+# 1M
 def NumberToPattern(index,k):
     if k==1 : return NumberToSymbol(index)
 
@@ -302,26 +349,32 @@ def NumberToPattern(index,k):
     return PrefixPattern + symbol
 
 ###print(NumberToPattern(11,2)) # = GT
+#infile= open_file("rosalind_ba1m.txt")
+#num1=int(infile[0])
+#num2=int(infile[1])
+#print(NumberToPattern(num1,num2))
+
+
 
 ###### PRIMJER :
 text= "AAGCAAAGGTGGG"
 k=2
 k_mers=find_k_mers(text,k)
-print(k_mers)  # 2-meri : ['AA', 'AG', 'GC', 'CA', 'AA', 'AA', 'AG', 'GG', 'GT', 'TG', 'GG', 'GG']
+#print(k_mers)  # 2-meri : ['AA', 'AG', 'GC', 'CA', 'AA', 'AA', 'AG', 'GG', 'GT', 'TG', 'GG', 'GG']
 indexi=[]
 for kmer in k_mers:
     idx=PatternToNumber(kmer)
     kmer_idx_tuple= (kmer,idx)
     indexi.append(kmer_idx_tuple)
 
-print(indexi)
+#print(indexi)
 
 def SortTuples(indexi):
     sorted_indices=sorted(indexi, key=lambda x: x[1])
     return sorted_indices
 
 sorted_indices=SortTuples(indexi)
-print(sorted_indices)
+#print(sorted_indices)
 
 def FindingFrequentWordsBySorting(Text,k):
     FrequentPatterns=[]
@@ -344,7 +397,7 @@ def FindingFrequentWordsBySorting(Text,k):
     return FrequentPatterns
 
 frekventni_patterni=FindingFrequentWordsBySorting(text,k)
-print(frekventni_patterni)  # ['AA', 'GG']
+#print(frekventni_patterni)  # ['AA', 'GG']
 
 ###############################
 # CLUMP FINDING  poboljsani -  to ima u knjizi
@@ -365,10 +418,10 @@ def ImmediateNeighbours(Pattern):
                 Neighbourhood.append(Neighbour)
     return Neighbourhood
 
-print("*********** Neposredno Susjedstvo :  ****************")
-print(ImmediateNeighbours(text)) # ['AAGCAAAGGTGGG', 'AbGCAAAGGTGGG', 'AcGCAAAGGTGGG', 'AdGCAAAGGTGGG', 'AAaCAAAGGTGGG', 'AAbCAAAGGTGGG', 'AAcCAAAGGTGGG', 'AAdCAAAGGTGGG', 'AAGaAAAGGTGGG', 'AAGbAAAGGTGGG', 'AAGdAAAGGTGGG', 'AAGCbAAGGTGGG', 'AAGCcAAGGTGGG', 'AAGCdAAGGTGGG', 'AAGCAbAGGTGGG', 'AAGCAcAGGTGGG', 'AAGCAdAGGTGGG', 'AAGCAAbGGTGGG', 'AAGCAAcGGTGGG', 'AAGCAAdGGTGGG', 'AAGCAAAaGTGGG', 'AAGCAAAbGTGGG', 'AAGCAAAcGTGGG', 'AAGCAAAdGTGGG', 'AAGCAAAGaTGGG', 'AAGCAAAGbTGGG', 'AAGCAAAGcTGGG', 'AAGCAAAGdTGGG', 'AAGCAAAGGaGGG', 'AAGCAAAGGbGGG', 'AAGCAAAGGcGGG', 'AAGCAAAGGdGGG', 'AAGCAAAGGTaGG', 'AAGCAAAGGTbGG', 'AAGCAAAGGTcGG', 'AAGCAAAGGTdGG', 'AAGCAAAGGTGaG', 'AAGCAAAGGTGbG', 'AAGCAAAGGTGcG', 'AAGCAAAGGTGdG', 'AAGCAAAGGTGGa', 'AAGCAAAGGTGGb', 'AAGCAAAGGTGGc', 'AAGCAAAGGTGGd']
+#print("*********** Neposredno Susjedstvo :  ****************")
+#print(ImmediateNeighbours(text)) # ['AAGCAAAGGTGGG', 'AbGCAAAGGTGGG', 'AcGCAAAGGTGGG', 'AdGCAAAGGTGGG', 'AAaCAAAGGTGGG', 'AAbCAAAGGTGGG', 'AAcCAAAGGTGGG', 'AAdCAAAGGTGGG', 'AAGaAAAGGTGGG', 'AAGbAAAGGTGGG', 'AAGdAAAGGTGGG', 'AAGCbAAGGTGGG', 'AAGCcAAGGTGGG', 'AAGCdAAGGTGGG', 'AAGCAbAGGTGGG', 'AAGCAcAGGTGGG', 'AAGCAdAGGTGGG', 'AAGCAAbGGTGGG', 'AAGCAAcGGTGGG', 'AAGCAAdGGTGGG', 'AAGCAAAaGTGGG', 'AAGCAAAbGTGGG', 'AAGCAAAcGTGGG', 'AAGCAAAdGTGGG', 'AAGCAAAGaTGGG', 'AAGCAAAGbTGGG', 'AAGCAAAGcTGGG', 'AAGCAAAGdTGGG', 'AAGCAAAGGaGGG', 'AAGCAAAGGbGGG', 'AAGCAAAGGcGGG', 'AAGCAAAGGdGGG', 'AAGCAAAGGTaGG', 'AAGCAAAGGTbGG', 'AAGCAAAGGTcGG', 'AAGCAAAGGTdGG', 'AAGCAAAGGTGaG', 'AAGCAAAGGTGbG', 'AAGCAAAGGTGcG', 'AAGCAAAGGTGdG', 'AAGCAAAGGTGGa', 'AAGCAAAGGTGGb', 'AAGCAAAGGTGGc', 'AAGCAAAGGTGGd']
 
-print("*********** Susjedstvo :  ****************")
+
 def Suffix(Pattern):
     patt=Pattern[1:]
     return  patt
@@ -376,6 +429,9 @@ def Suffix(Pattern):
 def FirstSymbol(Pattern):
     patt= Pattern[0]
     return patt
+
+
+
 #### 1 N
 def Neighbors(Pattern,d):
     if(d==0): return [Pattern]
@@ -392,10 +448,18 @@ def Neighbors(Pattern,d):
             Neighborhood.append(FirstSymbol(Pattern)+ Text)
     return Neighborhood
 
-
+#print("*********** Susjedstvo :  ****************")
 #Susjedstvo=Neighbors(text,2)
 #for susjed in Susjedstvo:
 #    print(susjed)
+
+#infile= open_file("rosalind_ba1n.txt")
+#text=infile[0]
+#k=int(infile[1])
+#Susjedstvo=Neighbors(text,k)
+#for susjed in Susjedstvo:
+#    print(susjed)
+
 
 # Na ovaj način možemo generirati Susjedstvo svih k-mera Hammingove distance najviše d od Patterna.
 # Modificirajmo Funkciju Neighbours tako da generira Susjedstvo svih k-mera koji su udaljeni od Patterna točno za d ::
