@@ -1,7 +1,12 @@
+from reading_tasks_text import *
+
+
+
 # BRUTE FORCE - ideja :
 # Za bilo koji (k,d)-motiv mora postojati max d mismatches u dna za taj specifican k-mer
 # mozemo definirati sve k-mere i onda provjeriti je li neki od njih (k,d)-motiv
 
+#################################### 2 A
 ## ZADATAK : ako nam je dano vise stringova, pronadjimo moguce (k,d)-motive :
 # (k,d)-motiv ==> oznaka da imamo substring duzine k koji je slican drugome stringu do maksimalno d mismatches
 import math
@@ -55,7 +60,7 @@ def ApproximatePatternCount(dna, pattern, d):
 
 def WordsWithMismatches(text, k, d):  ## ==> trazi sve k-mere s najvise d razlika u stringu text
     kmeri_texta = findKmers(text, k)  # text = " ATTTGGC"
-    print(kmeri_texta)
+    #print(kmeri_texta)
     svi_susjedi = []
     kmeri_frekvencije = {}
     for kmer in kmeri_texta:
@@ -86,6 +91,18 @@ def MotifEnumeration(DNA_kolekcija, k, d):
 
 # motivEnur=MotifEnumeration(sample_dataset,3,1)
 # print(motivEnur)
+
+#infile= open_file("rosalind_ba2a.txt")
+#sample_dataset=[]
+#for stringy in infile[1:]:
+#    sample_dataset.append(stringy)
+#nums=infile[0].split(" ")
+#k=int(nums[0])
+#d=int(nums[1])
+#motivEnur=MotifEnumeration(sample_dataset,k,d)
+#print(motivEnur)
+#for mot in motivEnur:
+#    print(mot)
 
 #########################
 """
@@ -125,7 +142,7 @@ Neka imamo kolekciju k-mer motiva i k-mer Pattern
 """
 
 
-#################################### 2 A
+#################################### 2 B
 ##### ZADATAK : PRonadji k-mer Pattern koji minimizira d(Pattern,Dna) preko svih k-mer Patterna
 ######### Takav k-mer zovemo Median string za Dna
 ######### Input :Niz Dnaova i k (integer)
@@ -204,6 +221,15 @@ def MedianString(Dna_kolekcija, k):
 ### median=MedianString(dna_kolekcija,k)
 ### print(median)   # REZ = "GAC"
 
+#infile= open_file("rosalind_ba2b.txt")
+#dna_kolekcija=[]
+#for stringy in infile[1:]:
+#    dna_kolekcija.append(stringy)
+
+#k=int(infile[0])
+#median=MedianString(dna_kolekcija,k)
+#print(median)
+
 #################################################################################################################
 ####################################### 2 C  #########################################################################
 #################################################################################################################
@@ -225,7 +251,8 @@ def GetMatrix(dna_string, k):
 
 def GetCountMatrix(mca, k):
     shape = (4, k)
-    mca_shape = mca.shape
+    mca1=np.array(mca)
+    mca_shape = mca1.shape
     m = mca_shape[0]
     # n=mca_shape[1]
     count_matrix = numpy.empty(shape, dtype=int, order='C')
@@ -280,8 +307,7 @@ def Probability(motiv, profil, k):
 
 # matrica= GetMatrix(dna_string,k)
 # print(matrica)
-l = int(len(dna_string) / k)
-k = 4
+#l = int(len(dna_string) / k)
 # count=GetCountMatrix(matrica,k, l)
 # print(count)
 
@@ -315,7 +341,19 @@ def ProfileMostProbableKmerProblem(text, k, profil):
     mostProbableKmer = max(probabilities_kmers, key=probabilities_kmers.get)
     return mostProbableKmer
 
-
+#infile= open_file("rosalind_ba2c.txt")
+#text=infile[0]
+#k=int(infile[1])
+#prob_rows=[]
+#for stringy in infile[2:]:
+#    splitted=stringy.split(" ")
+#    probs=[]
+#    for spl in splitted:
+#        probs.append(float(spl))
+#    prob_rows.append(probs)
+#profil=prob_rows
+#rez=ProfileMostProbableKmerProblem(text, k, profil)
+#print(rez)
 #############################################################################################
 ###################################### 2 D ##################################################
 #############################################################################################
@@ -409,13 +447,29 @@ def GreedyMotifSearch(Dna_kolekcija, k, t):
 # print(BestMotifs)
 ########## OUTPUT : [['C', 'C', 'T', 'T'], ['G', 'A', 'T', 'A'], ['A', 'C', 'G', 'G'], ['C', 'C', 'T', 'A'], ['C', 'A', 'G', 'A']]
 ############ za k=3 : OUTPUT :: [['A', 'A', 'C'], ['G', 'A', 'T'], ['A', 'C', 'G'], ['A', 'A', 'G'], ['G', 'A', 'G']]
+'''
+infile= open_file("rosalind_ba2d.txt")
+nums=infile[0].split(" ")
+k=int(nums[0])
+t=int(nums[1])
+dna_kolekcija=[]
+for stringy in infile[1:]:
+    dna_kolekcija.append(stringy)
 
+BestMotifs=GreedyMotifSearch(dna_kolekcija,k,t)
+BestMotifs2=[]
+for mot in BestMotifs:
+    motif=""
+    for character in mot:
+        motif+=character
+    BestMotifs2.append(motif)
+    print(motif)
+    '''
 ##################################################################################################################################
 ##################################################    2 E   #######################################################################
 ##################################################################################################################################
 
 dna_kolekcija = ["TTACCTTAAC", "GATGTCTGTC", "ACGGCGTTAG", "CCCTAACGAG", "CGTCAGAGGT"]
-
 
 # Moze se dogoditi da vjerojatnost da se neki string razlikuje za samo jedan znak, ali da je vjerojatnost =0 ,
 # Da bismo izbjegli "unfair scoring" cesto zamijenjujemo nule u Profilnoj matrici s nekim vrlo malim brojevima (blizu nule) koje zovemo *pseudocounts*
@@ -519,9 +573,10 @@ def Consensus(
         consensus += izabrani_znak
     return consensus
 
-
+# bestMotifs=GreedyMotifSearch1(dna_kolekcija,k,len(dna_kolekcija))
 # cons=Consensus(bestMotifs)
 # print(cons) ########### OUTPUT : ACGT ==> TOCNO KAO U KNJIZI =))
+
 
 #################################################################################################################################################
 #######################################################   2 F        ############################################################################
@@ -622,6 +677,27 @@ OUTPUT :
                                                                 te bismo onda samo izabrali one koji se najcesce pojavljuju i stvorili konsenzus
                                                                  ==> ja sam pokrenula samo jednom i vec je bilo 3/5 tocno
  """
+
+
+'''
+infile= open_file("rosalind_ba2f.txt")
+nums=infile[0].split(" ")
+k=int(nums[0])
+l=int(nums[1])
+dna_kolekcija=[]
+for stringy in infile[1:]:
+    dna_kolekcija.append(stringy)
+rez=RandomizedMotifSearch(dna_kolekcija,k,l)
+
+rez2=[]
+for l in rez:
+    motif=""
+    for character in l:
+        motif+=character
+    rez2.append(motif)
+    print(motif)
+
+'''
 ######################################################################################################################################################
 ################################################################ 2 G #################################################################################
 ######################################################################################################################################################
@@ -740,8 +816,7 @@ def GibbsSampler(Dna_kolekcija, k, t, N):
     return BestMotifs
 
 
-# best_motivs_Gibbs = GibbsSampler(rosalind_dataset, k, t, 100)
-# print(best_motivs_Gibbs)
+
 ''' OUTPUT 
 # ovaj algoritam nekad treba izvrititi vise puta i onda uzeti u obzir samo one rezultate kada je score barem 10... :)) 
 BEST SCORE : 10
@@ -760,6 +835,25 @@ BEST SCORE : 10
  ['T' 'C' 'C' 'A' 'C' 'G' 'T' 'G']]
 '''
 
+'''
+infile= open_file("rosalind_ba2g.txt")
+nums=infile[0].split(" ")
+k=int(nums[0])
+t=int(nums[1])
+times=int(nums[2])
+dna_kolekcija=[]
+for stringy in infile[1:]:
+    dna_kolekcija.append(stringy)
+best_motivs_Gibbs = GibbsSampler(dna_kolekcija, k, t,times)
+rez2=[]
+for l in best_motivs_Gibbs:
+    motif=""
+    for character in l:
+        motif+=character
+    rez2.append(motif)
+    print(motif)
+
+'''
 
 #################################################################################################################################################
 ########################################### 2 H ################################################################################################

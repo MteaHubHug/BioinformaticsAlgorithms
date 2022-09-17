@@ -1,4 +1,5 @@
 import collections
+from reading_tasks_text import *
 from collections import OrderedDict
 # Newspaper problem - mozemo li od puno fragmenata novina sastaviti novine ?
 # Teze nego sto se cini - imamo dijelice puno kopija istog izdanja jednog primjerka
@@ -45,6 +46,17 @@ def Composition(Text, k):
 # kmeri=Composition(rosalind_sample,k) # ['ATG', 'GGG', 'GGG', 'GGT', 'GTG', 'TAT', 'TGC', 'TGG'] ==> ok :)
 # rosalind - output : ['AATCC', 'ATCCA', 'CAATC', 'CCAAC', 'TCCAA'] ==> ok :)
 
+# kmeri=Composition(rosalind_sample,k) # ['ATG', 'GGG', 'GGG', 'GGT', 'GTG', 'TAT', 'TGC', 'TGG'] ==> ok :)
+# rosalind - output : ['AATCC', 'ATCCA', 'CAATC', 'CCAAC', 'TCCAA'] ==> ok :)
+'''
+infile= open_file("rosalind_ba3a.txt")
+k=int(infile[0])
+rosalind_sample=infile[1]
+kmeri=Composition(rosalind_sample,k)
+
+for kmer in kmeri:
+    print(kmer)
+'''
 # Ono sto nas zanima nije dobiti kmere iz stringa, vec iz kmera dobiti Dna string , zapravo...==> String Reconstruction Problem
 # Input : integer k, kolekcija k-mera "Patterns"
 # Output  : string Text (dna) s kompozicijom k-mera jednakom kao sto je kolekcija "Patterns" iz inputa
@@ -113,6 +125,12 @@ def StringSpelledByGenomePathProblem(kolekcija):
 
 # res=StringSpelledByGenomePathProblem(kolekcija_dijelica)
 # print(res) # # output : ACCGAAGCT ==> OK
+'''
+infile= open_file("rosalind_ba3b.txt")
+res=StringSpelledByGenomePathProblem(infile)
+print(res)
+
+'''
 # kad imam veliki dataset - puno charactera, mogu provjeriti rjesenje preko ascii tj. numericke reprezentacije charactera
 
 ########################################################################################################################################
@@ -170,6 +188,17 @@ def Overleap(kolekcija):
  [0 0 0 0 1]
  [0 0 0 0 0]]
 {'ACCGA': ['CCGAA'], 'CCGAA': ['CGAAG'], 'CGAAG': ['GAAGC'], 'GAAGC': ['AAGCT'], 'AAGCT': []}'''  # ==> OK
+'''
+infile= open_file("rosalind_ba3c.txt")
+graf=Overleap(infile)
+adj_list=AdjacencyList(graf,infile)
+print(adj_list)
+
+for key in adj_list:
+    print(key, " -> ", ', '.join(adj_list[key]))
+
+
+'''
 
 ########################################################################################################################################
 ####################################################### 3 D ############################################################################
@@ -213,7 +242,16 @@ def DeBrujinGraph(text, k):
 # deBrujin=DeBrujinGraph(text,k)
 # print(deBrujin)
 # OUTPUT : {'CTC': ['TCT'], 'CTA': ['TAC'], 'TAC': [], 'AGA': ['GAT'], 'TTC': ['TCT'], 'GAT': ['ATT'], 'ATT': ['TTC'], 'TCT': ['CTC', 'CTA'], 'AAG': ['AGA']} => OK
+'''
+infile= open_file("rosalind_ba3d.txt")
+k=int(infile[0])
+text=infile[1]
+deBrujin=DeBrujinGraph(text,k)
 
+for key in deBrujin:
+    print(key, " -> ", ', '.join(deBrujin[key]))
+
+'''
 ########################################################################################################################################
 ################################################ 3 E #################################################################################
 ########################################################################################################################################
@@ -300,8 +338,16 @@ GAG -> AGG
 GGA -> GAG
 GGG -> GGA,GGG
 '''
+'''
+
+infile= open_file("rosalind_ba3e.txt")
+deBrujin2=DeBrujinGraph2(infile)
+
+for key in deBrujin2:
+    print(key, " -> ", ', '.join(deBrujin2[key]))
 
 
+'''
 ########################################################################################################################################
 #####################################   3 F ############################################################################################
 ########################################################################################################################################
@@ -399,6 +445,9 @@ G = {
 # 6->8->7->9->6->5->4->2->1->0->3->2->6 # rosalind rjesenje
 # moje rjesenje : 0 -> 3 -> 2 -> 6 -> 8 -> 7 -> 9 -> 6 -> 5 -> 4 -> 2 -> 1 -> 0  ... OK
 # 9 -> a -> 5 -> 4 -> 2 -> 1 -> 0 -> 3 -> 2 -> a -> 8 -> 7 -> 9  ==> OK
+
+
+
 ########################################################################################################################################
 ########################################### 3 G #######################################################################################
 ########################################################################################################################################
@@ -509,6 +558,12 @@ patterni = ["CTTA","ACCA","TACC","GGCT","GCTT","TTAC" ]
 #rez=StringCompositionProblem(patterni,k)
 #print(rez) #  GGCTTACCA ==> OK
 
+infile= open_file("rosalind_ba3h.txt")
+k=int(infile[0])
+patterni=infile[1:]
+rez=StringCompositionProblem(patterni,k)
+print(rez)
+
 ########################################################################################################################################
 ####################################################### 3 I ##############################################################################
 ########################################################################################################################################
@@ -548,6 +603,11 @@ def CircularStringProblem(k):
 k=4
 #circularString=CircularStringProblem(k)
 #print(circularString)   # 1111011001010000 ==> nije kao rosalind, ali je isto tocno
+
+infile= open_file("rosalind_ba3i.txt")
+k=int(infile[0])
+circularString=CircularStringProblem(k)
+print(circularString)
 
 ########################################################################################################################################
 ########################################################################################################################################
