@@ -291,10 +291,56 @@ def HammingDistance(p,q):
 #HammingDist=HammingDistance(p,q)
 #print(HammingDist )
 
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
 # 1 H Approximate Pattern Matching Problem
 # Find all approximate occurrences of a pattern in a string
-#### u C#-u ...
 
+def positions(text,pattern,k,d):
+    pozicije=[]
+    kejmeri=find_k_mers(text,k)
+    kmeri=kejmeri
+    for i in range(0,len(kmeri)-1):
+        if(HammingDistance(kejmeri[i],pattern)<=d):
+            pozicije.append(i)
+    return pozicije
+
+
+stringtext = "atcaATGATCAACgtaagcttctaagcATGATCAAGgtgctcacacagtttatccacaacctgagtggatgacatcaagataggtcgttgtatctccttcctctcgtactctcatgacca" \
+             "cggaaagATGATCAAGagaggatgatttcttggccatatcgcaatgaatacttgtgacttgtgcttccaattgacatcttcagcgccatattgcgctggccaaggtgacggagcgggatt"\
+             "acgaaagCATGATCATggctgttgttctgtttatcttgttttgactgagacttgttaggatagacggtttttcatcactgactagccaaagccttactctgcctgacatcgaccgtaaat"\
+             "tgataatgaatttacatgcttccgcgacgatttacctCTTGATCATcgatccgattgaagatcttcaattgttaattctcttgcctcgactcatagccatgatgagctCTTGATCATgtt"\
+             "tccttaaccctctattttttacggaagaATGATCAAGctgctgctCTTGATCATcgtttc"
+
+text2=stringtext.upper()
+pattern = "ATGATCAAG"
+k=len(pattern)
+d = 1
+
+'''
+
+infile= open_file("rosalind_ba1h.txt")
+text2=infile[1].upper()
+pattern=infile[0]
+d=int(infile[2])
+k=len(pattern)
+
+pozicije = positions(text2, pattern,k, d)
+pozicije=[str(i) for i in pozicije]
+print(" ".join(pozicije))
+
+
+'''
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
 ####################################################
 # 1K - Frequency Array
 # funkcije koje su potrebne u algoritmu:
