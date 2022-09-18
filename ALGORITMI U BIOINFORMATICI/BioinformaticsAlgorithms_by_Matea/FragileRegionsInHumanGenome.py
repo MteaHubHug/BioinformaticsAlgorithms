@@ -367,3 +367,24 @@ j=3
 j_=8
 rez=get2BreakOnGenomeGraph(grafGranoma,i,i_,j,j_)
 #print(rez)  #(2, 4), (3, 1), (7, 5), (6, 8)
+
+'''
+infile= open_file("rosalind_ba6j.txt")
+mydata=infile[0].split("), ")
+mydata2=[]
+for d in mydata:
+    d2=d.strip("(").strip(")").split(", ")
+    d2=tuple(int(i) for i in d2)
+    mydata2.append(d2)
+
+nums=infile[1].split(", ")
+nums=[int(i) for i in nums]
+i=nums[0]
+i_=nums[1]
+j=nums[2]
+j_=nums[3]
+rez=get2BreakOnGenomeGraph(mydata2,i,i_,j,j_)
+rez=[str(i) for i in rez]
+print(", ".join(rez))
+
+'''
