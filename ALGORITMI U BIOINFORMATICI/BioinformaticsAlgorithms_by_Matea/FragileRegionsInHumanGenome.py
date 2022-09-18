@@ -212,7 +212,17 @@ def CycleToChromosome(Nodes):
 sekvencaNodes=[1, 2, 4, 3, 6, 5, 7, 8]
 #rez=CycleToChromosome(sekvencaNodes)
 #print(rez)  # [1, -2, -3, 4] -- OK
+'''
+infile= open_file("rosalind_ba6g.txt")
+mydata=infile[0].strip("(").strip(")").split(" ")
+mydata= [int(i) for i in mydata]
+rez=CycleToChromosome(mydata)
+rez=[str(i) for i in rez]
+rez=add_plus(rez)
+rez=[str(i) for i in rez]
+print( "(" +  " ".join(rez)  + ")")
 
+'''
 ##############################################################################################################################################################
 ####################################################################  6 H #################################################################################
 ##############################################################################################################################################################
@@ -235,6 +245,25 @@ def ColoredEdges(P):
 P=[[+1, -2, -3],[+4, +5, -6]]
 #rez=ColoredEdges(P)
 #print(rez)  # (2, 4), (3, 6), (5, 1), (8, 9), (10, 12), (11, 7)  =>OK
+'''
+
+infile= open_file("rosalind_ba6h.txt")
+mydata=infile[0].split(")")
+mydata2=[]
+for d in mydata:
+    d2=d+ ")"
+    mydata2.append(d2)
+mydata2=mydata2[:-1]
+input=[]
+for d in mydata2:
+    d2=d.strip("(").strip(")").split(" ")
+    d2=[int(i) for i in d2]
+    input.append(d2)
+rez=ColoredEdges(input)
+rez=[str(i) for i in rez]
+print(" ,".join(rez))
+
+'''
 
 '''def ColoredEdges(P):
     Edges = []
@@ -244,6 +273,9 @@ P=[[+1, -2, -3],[+4, +5, -6]]
         for i in it:
             Edges.append((i,next(it)))
     return Edges'''
+
+
+
 
 ##############################################################################################################################################################
 ####################################################################  6 I #################################################################################
@@ -287,7 +319,24 @@ def GraphToGenome(GenomeGraph):
 grafGenoma=[(2, 4), (3, 6), (5, 1), (7, 9), (10, 12), (11, 8)]
 #rez=GraphToGenome(grafGenoma)  # (+1 -2 -3)(-4 +5 -6)
 #print(rez)
+'''
 
+infile= open_file("rosalind_ba6i.txt")
+mydata=infile[0].split("), ")
+mydata2=[]
+for d in mydata:
+    d2=d.strip("(").strip(")").split(", ")
+    d2=tuple(int(i) for i in d2)
+    mydata2.append(d2)
+rez=GraphToGenome(mydata2)
+stringrez=""
+for r in rez:
+    r=[str(i) for i in r]
+    r=add_plus(r)
+    stringrez+="(" + " ".join(r) + ")"
+print(stringrez)
+
+'''
 
 ##############################################################################################################################################################
 ####################################################################  6 J #################################################################################
