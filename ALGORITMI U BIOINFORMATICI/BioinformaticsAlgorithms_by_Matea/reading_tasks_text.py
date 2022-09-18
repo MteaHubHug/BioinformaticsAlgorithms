@@ -19,3 +19,10 @@ def open_file(name):
     return content_edited
 
 
+def add_plus(lista):
+    new_list=[]
+    for el in lista:
+        if(el[0]!="-"):
+            el= "+"+el
+        new_list.append(el)
+    return new_list
