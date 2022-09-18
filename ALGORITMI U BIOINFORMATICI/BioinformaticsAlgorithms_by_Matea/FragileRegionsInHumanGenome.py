@@ -89,7 +89,6 @@ print(brojBreakpoints)
 
 from collections import defaultdict
 
-
 def Two_Break_Distance(P, Q):
     '''Returns the 2-Break Distance of Circular Chromosomes P and Q.'''
 
@@ -131,7 +130,37 @@ Q=[[+1, -3, -6, -5],[+2, -4]]
 #rez=Two_Break_Distance(P,Q)
 #print(rez) # rez=3 ==> OK
 
+'''
+infile= open_file("rosalind_ba6c.txt")
+mydata=infile[0].split(")")
+mydata2=[]
+for d in mydata:
+    d2=d+")"
+    mydata2.append(d2)
+mydata3=[]
+for d in mydata2[:-1]:
+    d2=d.strip("(").strip(")").split(" ")
+    d2=[int(i) for i in d2]
+    mydata3.append(d2)
 
+
+mydataQ=infile[1].split(")")
+mydata2Q=[]
+for d in mydataQ:
+    d2=d+")"
+    mydata2Q.append(d2)
+mydata3Q=[]
+for d in mydata2Q[:-1]:
+    d2=d.strip("(").strip(")").split(" ")
+    d2=[int(i) for i in d2]
+    mydata3Q.append(d2)
+
+P=mydata3
+Q=mydata3Q
+rez=Two_Break_Distance(P,Q)
+print(rez)
+
+'''
 ##############################################################################################################################################################
 ####################################################################  6 F #################################################################################
 ##############################################################################################################################################################
